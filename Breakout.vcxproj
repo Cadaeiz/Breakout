@@ -88,7 +88,9 @@
     <ClInclude Include="Collidable.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameState.hpp" />
+    <ClInclude Include="List.hpp" />
     <ClInclude Include="Paddle.hpp" />
+    <ClInclude Include="Singleton.hpp" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="Tile.hpp" />
     <ClInclude Include="TileState.hpp" />
@@ -98,6 +100,7 @@
     <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="State.cpp" />

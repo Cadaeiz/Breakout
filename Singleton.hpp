@@ -6,15 +6,9 @@ class Singleton
 {
 private:
 	Singleton();
-public:
-	static T * getInstance();
-};
-
-template <class T>
-T * Singleton::getInstance()
-{
 	static T t;
-	return &t;
-}
+public:
+	static T * getInstance() { return &t; }
+};
 
 #endif
