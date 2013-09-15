@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClInclude Include="Ball.hpp" />
     <ClInclude Include="Collidable.hpp" />
+    <ClInclude Include="Factory.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameState.hpp" />
     <ClInclude Include="List.hpp" />
@@ -98,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Collidable.cpp" />
+    <ClCompile Include="Factory.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="List.cpp" />
