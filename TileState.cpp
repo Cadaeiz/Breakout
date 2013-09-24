@@ -9,11 +9,15 @@ void TileActiveState::collide(Tile & t, Ball & b)
 void TileDyingState::init(Tile & t)
 {
 	t.collisionBox = sf::FloatRect(0,0,0,0);
-	t.timer = 
 }
 
 
 void TileDyingState::update(Tile & t)
 {
-	
+	sf::Color color = t.sprite.getColor();
+	if (color.a < 5)
+		t.changeState(Tile::DEAD);
+
+	color.a -= 5;
+	t.sprite.setColor(color);
 }

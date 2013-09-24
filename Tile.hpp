@@ -6,6 +6,7 @@
 
 class Tile : public Collidable
 {
+	friend class TileState;
 	friend class TileActiveState;
 	friend class TileDyingState;
 	friend class TileDeadState;
@@ -21,7 +22,7 @@ private:
 	Tile();
 	TileState * currentState;
 	sf::Sprite sprite;
-	int durability, timer;
+	int durability;
 	void changeState(int state);
 public:
 	Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect);
@@ -29,6 +30,7 @@ public:
 	void handleEvent(sf::Event event) { currentState -> handleEvent(*this, event); }
 	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }
 	void collide(Collidable & c) { currentState -> collide(*this, c); }
+	bool isDead() { return (currentState == &StateMachine.dead); }
 };
 
 #endif

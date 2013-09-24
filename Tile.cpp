@@ -12,12 +12,14 @@ Tile::Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect)
 	collisionBox = sf::FloatRect(sprite.getGlobalBounds());
 	sprite.setOrigin(collisionBox.width / 2, collisionBox.height / 2);
 
+	currentState = 0;
 	changeState(ACTIVE);
 }
 
 void Tile::changeState(int state)
 {
-	currentState -> cleanup(*this);
+	if (currentState)
+		currentState -> cleanup(*this);
 	
 	switch(state)
 	{

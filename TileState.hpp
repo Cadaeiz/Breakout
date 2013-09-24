@@ -41,7 +41,6 @@ public:
 	void init(Tile & t) { }
 	void cleanup(Tile & t) { }
 	void update(Tile & t) { }
-	void handleEvent(Tile & t, sf::Event event) { }
 	void collide(Tile & t, Collidable & c) { }
 };
 

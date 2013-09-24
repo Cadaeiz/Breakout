@@ -2,8 +2,8 @@
 #define TILEFACT_H_
 
 #include <SFML/Graphics.hpp>
-#include "Tile.hpp"
 #include "List.hpp"
+#include "Tile.hpp"
 
 
 class TileFactory
@@ -17,6 +17,7 @@ public:
 	void loadTexture(const std::string & filename, const sf::IntRect & area = sf::IntRect());
 	Tile * generate(int dur, sf::Vector2f pos);
 	void reset();
+	void filterDead();
 	void update();
 	void draw(sf::RenderWindow & window);
 	void handleEvent(sf::Event event);
