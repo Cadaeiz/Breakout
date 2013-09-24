@@ -12,6 +12,7 @@ class Game
 	int currentState;
 
 public:
+	const static int ScreenWidth = 800, ScreenHeight = 600;
 	void init();
 	void cleanup();
 

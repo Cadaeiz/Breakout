@@ -1,10 +1,15 @@
 #include "Wall.hpp"
 
-Wall::Wall(sf::Vector2f pos, sf::Texture & texture, sf::IntRect * rect = 0)
+Wall::Wall(sf::Vector2f pos, sf::Texture & texture, int length, bool horizontal = true)
 {
+	sf::IntRect rect = sf::IntRect(0,0,length,WALLWIDTH);
 	sprite.setTexture(texture);
-	if (rect)
-		sprite.setTextureRect(*rect);
+	sprite.setTextureRect(rect);
+	if (!horizontal)
+	{
+		pos.x += WALLWIDTH;
+		sprite.rotate(-90);
+	}
 	sprite.setPosition(pos);
 
 	collisionBox = sf::FloatRect(sprite.getGlobalBounds());

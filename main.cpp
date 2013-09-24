@@ -2,8 +2,6 @@
 #include "Game.hpp"
 #include <sstream>
 
-#define SCREENW 800
-#define SCREENH 600
 
 /* fixed fps (both virtual and actual) */
 #define FPS 60
@@ -14,7 +12,7 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(SCREENW, SCREENH), "Game Name Here");
+	sf::RenderWindow window(sf::VideoMode(Game::ScreenWidth, Game::ScreenHeight), "Breakout");
 	sf::Clock clock1, clock2;
 	sf::Time elapsed1, elapsed2;
 

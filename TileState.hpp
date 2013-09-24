@@ -3,53 +3,46 @@
 
 #include "Tile.hpp"
 #include "State.hpp"
+#include "Ball.hpp"
 
-class TileState : State<Tile>
+class TileState
 {
-public:
+public:	
+	virtual void init(Tile & t) = 0;
+	virtual void cleanup(Tile & t) = 0;
+	virtual void update(Tile & t) = 0;
+	void handleEvent(Tile & t, sf::Event event) { }
+	void draw(Tile & t, sf::RenderWindow & window) { window.draw(t.sprite); }
 	virtual void collide(Tile & t, Collidable & c) = 0;
 };
 
-class AliveState : public TileState
+class TileActiveState : public TileState
 {
-private:
-	AliveState() { }
-protected:
+public:
 	void init(Tile & t) { }
 	void cleanup(Tile & t) { }
-public:
 	void update(Tile & t) { }
-	void draw(Tile & t, sf::RenderWindow & window) { window.draw(t.sprite); }
-	void collide(Tile & t, Collidable & c);
-	friend class Tile;
-};
-
-class DyingState : public TileState
-{
-private:
-	DyingState() { }
-protected:
-	void init(Tile & t);
-	void cleanup(Tile & t);
-public:
-	void update(Tile & t);
-	void draw(Tile & t, sf::RenderWindow & window) { window.draw(t.sprite); }
 	void collide(Tile & t, Collidable & c) { }
-	friend class Tile;
+	void collide(Tile & t, Ball & b);
 };
 
-class DeadState : public TileState
+class TileDyingState : public TileState
 {
-private:
-	DeadState() { }
-protected:
+public:
 	void init(Tile & t);
 	void cleanup(Tile & t) { }
-public:
 	void update(Tile & t);
-	void draw(Tile & t, sf::RenderWindow & window) { }
 	void collide(Tile & t, Collidable & c) { }
-	friend class Tile;
+};
+
+class TileDeadState : public TileState
+{
+public:
+	void init(Tile & t) { }
+	void cleanup(Tile & t) { }
+	void update(Tile & t) { }
+	void handleEvent(Tile & t, sf::Event event) { }
+	void collide(Tile & t, Collidable & c) { }
 };
 
 #endif

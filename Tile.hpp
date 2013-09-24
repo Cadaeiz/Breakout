@@ -6,21 +6,29 @@
 
 class Tile : public Collidable
 {
-	const static int ALIVE = 0, DYING = 1, DEAD = 2;
-
-	friend class State<Tile>;
+	friend class TileActiveState;
+	friend class TileDyingState;
+	friend class TileDeadState;
+	const static int ACTIVE = 0, DYING = 1, DEAD = 2;
 private:
+	static struct
+	{
+		TileActiveState active;
+		TileDyingState dying;
+		TileDeadState dead;
+	} StateMachine;
+
 	Tile();
 	TileState * currentState;
 	sf::Sprite sprite;
-	int durability;
-
+	int durability, timer;
+	void changeState(int state);
 public:
-	static TileState * getState(int type);
-	Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect * rect = 0);
+	Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect);
 	void update() { currentState -> update(*this); }
+	void handleEvent(sf::Event event) { currentState -> handleEvent(*this, event); }
 	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }
-	void collide(Collidable & c) { currentState -> collide(*this, window); }
+	void collide(Collidable & c) { currentState -> collide(*this, c); }
 };
 
 #endif
