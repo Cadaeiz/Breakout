@@ -10,6 +10,7 @@ Tile::Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect)
 	sprite.setPosition(pos);
 
 	collisionBox = sf::FloatRect(sprite.getGlobalBounds());
+	/* set position relative to center of sprite */
 	sprite.setOrigin(collisionBox.width / 2, collisionBox.height / 2);
 
 	currentState = 0;

@@ -10,7 +10,7 @@ private:
 	sf::Sprite sprite;
 	Wall();
 public:
-	Wall(sf::Vector2f pos, sf::Texture & texture, int length, bool horizontal);
+	Wall(sf::Vector2f pos, sf::Texture & texture, float length, bool horizontal);
 	void update() { }
 	void draw(sf::RenderWindow & window) { window.draw(sprite); }
 	void handleEvent(sf::Event event) { }

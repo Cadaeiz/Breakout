@@ -3,15 +3,15 @@
 
 #include "Collidable.hpp"
 #include "Wall.hpp"
-
-#define PADDLESTEP 5
-
+#include "Ball.hpp"
 
 class Paddle : public Collidable
 {
+	const static int STEP = 5;
 private:
 	sf::Sprite sprite;
 	sf::Vector2f size;
+	Ball * stuckBall;
 	void setXPos(float x);
 	void move(float dx);
 public:
@@ -21,6 +21,8 @@ public:
 	void handleEvent(sf::Event event);
 	void collide(Wall & c);
 	void collide(Collidable & c) { }
+	void attach(Ball * ball) { stuckBall = ball; }
+	void detach(Ball * ball) { if  (ball == stuckBall) stuckBall = 0; }
 };
 
 #endif

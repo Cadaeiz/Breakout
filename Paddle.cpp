@@ -10,6 +10,8 @@ Paddle::Paddle(sf::Vector2f pos, sf::Texture & texture)
 	/* set origin of sprite as the center */
 	size = sf::Vector2f(collisionBox.width, collisionBox.height);
 	sprite.setOrigin(size.x / 2, size.y / 2);
+
+	stuckBall = 0;
 }
 
 void Paddle::update()
@@ -17,10 +19,10 @@ void Paddle::update()
 	float x = sprite.getPosition().x;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		x -= PADDLESTEP;
+		x -= STEP;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		x += PADDLESTEP;
+		x += STEP;
 
 	setXPos(x);
 }
@@ -52,13 +54,28 @@ void Paddle::setXPos(float x)
 	else if (x > Game::ScreenWidth - size.x / 2)
 		x = Game::ScreenWidth - size.x / 2;
 
-	sprite.setPosition(x, sprite.getPosition().y);
+	sf::Vector2f pos = sf::Vector2f(x,sprite.getPosition().y);
+	sprite.setPosition(pos);
 	collisionBox.left = x - size.x / 2;
+	
+	/* if there is a ball attached, move it as well */
+	if (stuckBall)
+	{
+		pos.y -= size.y / 2 + stuckBall -> size.y / 2;
+		stuckBall -> setPosition(pos);
+	}
 }
 
 void Paddle::move(float dx)
 {
 	sprite.move(dx,0);
 	collisionBox.left += dx;
+
+	/* if there is a ball attached, move it as well */
+	if (stuckBall)
+	{
+		sf::Vector2f pos = sprite.getPosition();
+		pos.y -= size.y / 2 + stuckBall -> size.y / 2;
+		stuckBall -> setPosition(pos);
+	}
 }
- 

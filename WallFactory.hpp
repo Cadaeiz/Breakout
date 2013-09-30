@@ -14,7 +14,7 @@ public:
 	WallFactory();
 	~WallFactory();
 	List<Wall> & getList() { return active; }
-	void loadTexture(const std::string & filename, const sf::IntRect & area);
+	void loadTexture(const sf::Image & image, const sf::IntRect & area);
 	Wall * generate(sf::Vector2f & pos, int length, bool horizontal);
 	void reset();
 	void draw(sf::RenderWindow & window);

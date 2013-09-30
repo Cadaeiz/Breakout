@@ -13,7 +13,7 @@ private:
 public:
 	~PaddleFactory();
 	List<Paddle> & getList() { return active; }
-	void loadTexture(const std::string & filename, const sf::IntRect & area = sf::IntRect());
+	void loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect());
 	Paddle * generate(sf::Vector2f pos);
 	void reset();
 	void update();

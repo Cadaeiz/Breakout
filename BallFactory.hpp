@@ -1,27 +1,25 @@
-#ifndef TILEFACT_H_
-#define TILEFACT_H_
+#ifndef BALLFACTORY_H_
+#define BALLFACTORY_H_
 
 #include <SFML/Graphics.hpp>
+#include "Ball.hpp"
 #include "List.hpp"
-#include "Tile.hpp"
 
-
-class TileFactory
+class BallFactory
 {
-private:
+	private:
 	sf::Texture texture;
-	List<Tile> active;
+	List<Ball> active;
 public:
-	~TileFactory();
-	List<Tile> & getList() { return active; }
+	~BallFactory();
+	List<Ball> & getList() { return active; }
 	void loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect());
-	Tile * generate(int dur, sf::Vector2f pos);
+	Ball * generate(sf::Vector2f pos);
 	void reset();
 	void filterDead();
 	void update();
 	void draw(sf::RenderWindow & window);
 	void handleEvent(sf::Event event);
-
 };
 
 #endif

@@ -8,12 +8,14 @@ void TileActiveState::collide(Tile & t, Ball & b)
 
 void TileDyingState::init(Tile & t)
 {
+	/* reset collisionBox: no more collisions with this object should occur */
 	t.collisionBox = sf::FloatRect(0,0,0,0);
 }
 
 
 void TileDyingState::update(Tile & t)
 {
+	/* decrement the opacity of the sprite until it is invisible */
 	sf::Color color = t.sprite.getColor();
 	if (color.a < 5)
 		t.changeState(Tile::DEAD);

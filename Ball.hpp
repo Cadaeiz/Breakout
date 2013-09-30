@@ -4,15 +4,22 @@
 #include <SFML/Graphics.hpp>
 #include "Collidable.hpp"
 #include "BallState.hpp"
+#include "Paddle.hpp"
 
 class Ball : public Collidable
 {
+	/* allow paddle to move the ball when attached in launch state */
+	friend class Paddle;
+	//friend void Paddle::setXPos(float x);
+	//friend void Paddle::move(float x);
+
 	friend class BallState;
 	friend class BallLaunchState;
 	friend class BallMovingState;
 	friend class BallDyingState;
 	friend class BallDeadState;
 	const static int LAUNCH = 0, MOVING = 1, DYING = 2, DEAD = 3;
+
 private:
 	static struct
 	{
@@ -22,11 +29,17 @@ private:
 		BallDeadState dead;
 	} StateMachine;
 	BallState * currentState;
+
+	Paddle * primaryPaddle;
 	sf::Sprite sprite;
-	sf::Vector2f pos, vel;
+	sf::Vector2f vel, size;
+	float angle, dtheta, speed;
+
 	void changeState(int state);
+	void setPosition(sf::Vector2f p);
+	void move(sf::Vector2f dp);
 public:
-	Ball(sf::Vector2f Pos, sf::Texture & texture, sf::IntRect * rect = 0);
+	Ball(sf::Vector2f Pos, sf::Texture & texture, float speed, Paddle & paddle);
 	void update() { currentState -> update(*this); }
 	void handleEvent(sf::Event event) { currentState -> handleEvent(*this, event); }
 	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }

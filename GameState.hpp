@@ -9,9 +9,6 @@ class GameState
 {
 
 public:
-	GameState();
-	virtual ~GameState();
-
 	virtual void handleEvent(Game & game, sf::Event e) = 0;
 	virtual void run(Game & game, float time) = 0;
 	virtual void draw(Game & game, sf::RenderWindow & window) = 0;
@@ -22,18 +19,82 @@ public:
 	void changeState(GameState * state);
 };
 
-class StartState : public GameState 
+class MainMenuState : public GameState 
 {
 public:
-	StartState();
-	virtual ~StartState();
+	void handleEvent(Game & game, sf::Event e);
+	void run(Game & game, float time);
+	void draw(Game & game, sf::RenderWindow & window);
 
-	virtual void handleEvent(Game & game, sf::Event e);
-	virtual void runf(Game & game, float time);
-	virtual void draw(Game & game, sf::RenderWindow & window);
+	void init(Game & game);
+	void cleanup(Game & game);
+};
 
-	virtual void init(Game & game);
-	virtual void cleanup(Game & game);
+class LoadStageState : public GameState
+{
+public:
+	void handleEvent(Game & game, sf::Event e);
+	void run(Game & game, float time);
+	void draw(Game & game, sf::RenderWindow & window);
+
+	void init(Game & game);
+	void cleanup(Game & game);
+};
+
+class LoadLevelState : GameState
+{
+public:
+	void handleEvent(Game & game, sf::Event e);
+	void run(Game & game, float time);
+	void draw(Game & game, sf::RenderWindow & window);
+
+	void init(Game & game);
+	void cleanup(Game & game);
+};
+
+class GameplayState : GameState
+{
+public:
+	void handleEvent(Game & game, sf::Event e);
+	void run(Game & game, float time);
+	void draw(Game & game, sf::RenderWindow & window);
+
+	void init(Game & game);
+	void cleanup(Game & game);
+};
+
+class PauseState : GameState
+{
+public:
+	void handleEvent(Game & game, sf::Event e);
+	void run(Game & game, float time) { }
+	void draw(Game & game, sf::RenderWindow & window);
+
+	void init(Game & game);
+	void cleanup(Game & game);
+};
+
+
+class GameOverState : GameState
+{
+public:
+	void handleEvent(Game & game, sf::Event e);
+	void run(Game & game, float time);
+	void draw(Game & game, sf::RenderWindow & window);
+
+	void init(Game & game);
+	void cleanup(Game & game);
+};
+
+class ExitState : GameState
+{
+public:
+	void handleEvent(Game & game, sf::Event e) { }
+	void run(Game & game, float time) { }
+	void draw(Game & game, sf::RenderWindow & window) { }
+
+	void init(Game & game);
+	void cleanup(Game & game) { }
 };
 
 #endif

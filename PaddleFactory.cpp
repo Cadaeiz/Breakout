@@ -2,12 +2,13 @@
 
 PaddleFactory::~PaddleFactory()
 {
+	/* delete all active objects */
 	reset();
 }
 
-void PaddleFactory::loadTexture(const std::string & filename, const sf::IntRect & area = sf::IntRect())
+void PaddleFactory::loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect())
 {
-	texture.loadFromFile(filename,area);
+	texture.loadFromImage(image,area);
 }
 
 Paddle * PaddleFactory::generate(sf::Vector2f pos)

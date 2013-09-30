@@ -85,19 +85,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ball.hpp" />
+    <ClInclude Include="BallFactory.hpp" />
+    <ClInclude Include="BallState.hpp" />
     <ClInclude Include="Collidable.hpp" />
     <ClInclude Include="Factory.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="GameState.hpp" />
     <ClInclude Include="List.hpp" />
     <ClInclude Include="Paddle.hpp" />
+    <ClInclude Include="PaddleFactory.hpp" />
     <ClInclude Include="Singleton.hpp" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="Tile.hpp" />
+    <ClInclude Include="TileFactory.hpp" />
     <ClInclude Include="TileState.hpp" />
     <ClInclude Include="Wall.hpp" />
+    <ClInclude Include="WallFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BallFactory.cpp" />
+    <ClCompile Include="BallState.cpp" />
     <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -105,10 +114,13 @@
     <ClCompile Include="List.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Paddle.cpp" />
+    <ClCompile Include="PaddleFactory.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileFactory.cpp" />
     <ClCompile Include="TileState.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WallFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
