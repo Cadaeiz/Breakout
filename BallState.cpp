@@ -65,6 +65,18 @@ void BallMovingState::update(Ball & b)
 	}
 }
 
+void BallMovingState::collide(Ball & b, Paddle & p)
+{
+	sf::FloatRect rect = p.getCollisionBox();
+
+	sf::Vector2f distance = b.getCenter() - p.getCenter();
+
+	/* assume the collision is with the top of the paddle, and displace the ball outside of it */
+	b.move(sf::Vector2f(0,rect.top - (b.collisionBox.top + b.collisionBox.height)));
+
+	
+}
+
 /* on collision, negate the velocity on the axis the collision occured, then
  * displace the ball to be outside of the collidable object */
 void BallMovingState::collide(Ball & b, Collidable & c)

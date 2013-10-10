@@ -28,6 +28,7 @@ class BallMovingState : public BallState
 	void cleanup(Ball & b) { }
 	void update(Ball & b);
 	void handleEvent(Ball & b, sf::Event event) { }
+	void collide(Ball & b, Paddle & p);
 	void collide(Ball & b, Collidable & c);
 };
 
