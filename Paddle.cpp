@@ -1,22 +1,21 @@
 #include "Paddle.hpp"
+#include "Wall.hpp"
 #include "Game.hpp"
 
-Paddle::Paddle(sf::Vector2f pos, sf::Texture & texture)
+Paddle::Paddle(sf::Vector2f pos, sf::Texture & texture) : Collidable(CBRect(pos.x,pos.y,PADDLEW,PADDLEH), 1)
 {
 	sprite.setTexture(texture);
 	sprite.setPosition(pos);
 
-	collisionBox = sf::FloatRect(sprite.getGlobalBounds());
 	/* set origin of sprite as the center */
-	size = sf::Vector2f(collisionBox.width, collisionBox.height);
-	sprite.setOrigin(size.x / 2, size.y / 2);
+	sprite.setOrigin(PADDLEW / 2, PADDLEH / 2);
 
 	stuckBall = 0;
 }
 
 void Paddle::update()
 {
-	float x = sprite.getPosition().x;
+	float x = getCenter().x;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		x -= STEP;
@@ -37,45 +36,34 @@ void Paddle::handleEvent(sf::Event event)
  * displace the paddle outside of the wall */
 void Paddle::collide(Wall & c)
 {
-	sf::FloatRect box2 = c.getCollisionBox();
+	float dx;
 	/* if paddle is on the left side */
 	if (c.getCenter().x > getCenter().x)
-		move(box2.left - (collisionBox.left+collisionBox.width));
+		dx = (c.getCenter().x - WALLWIDTH / 2) - (getCenter().x + PADDLEW / 2);
 	/* if paddle is on the right side */
 	else
-		move((box2.left+box2.width) - collisionBox.left);
+		dx = (c.getCenter().x + WALLWIDTH / 2) - (getCenter().x - PADDLEW / 2);
+
+	move(dx);
 }
 
 void Paddle::setXPos(float x)
 {
 	/* keep paddle within the boundaries of the screen */
-	if (x < size.x / 2)
-		x = size.x / 2;
-	else if (x > Game::ScreenWidth - size.x / 2)
-		x = Game::ScreenWidth - size.x / 2;
+	if (x < PADDLEW / 2)
+		x = PADDLEW / 2;
+	else if (x > Game::ScreenWidth - PADDLEW / 2)
+		x = Game::ScreenWidth - PADDLEW / 2;
 
-	sf::Vector2f pos = sf::Vector2f(x,sprite.getPosition().y);
-	sprite.setPosition(pos);
-	collisionBox.left = x - size.x / 2;
-	
-	/* if there is a ball attached, move it as well */
-	if (stuckBall)
-	{
-		pos.y -= size.y / 2 + stuckBall -> size.y / 2;
-		stuckBall -> setPosition(pos);
-	}
+	move(x - getCenter().x);
 }
 
 void Paddle::move(float dx)
 {
 	sprite.move(dx,0);
-	collisionBox.left += dx;
+	box -> move(sf::Vector2f(dx,0));
 
 	/* if there is a ball attached, move it as well */
 	if (stuckBall)
-	{
-		sf::Vector2f pos = sprite.getPosition();
-		pos.y -= size.y / 2 + stuckBall -> size.y / 2;
-		stuckBall -> setPosition(pos);
-	}
+		stuckBall -> move(sf::Vector2f(dx,0));
 }

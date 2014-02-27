@@ -1,6 +1,9 @@
 #ifndef PADDLE_H_
 #define PADDLE_H_
 
+#define PADDLEW 160
+#define PADDLEH 30
+
 #include "Collidable.hpp"
 #include "Wall.hpp"
 #include "Ball.hpp"
@@ -10,7 +13,6 @@ class Paddle : public Collidable
 	const static int STEP = 5;
 private:
 	sf::Sprite sprite;
-	sf::Vector2f size;
 	Ball * stuckBall;
 	void setXPos(float x);
 	void move(float dx);

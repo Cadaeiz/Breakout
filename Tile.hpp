@@ -1,6 +1,9 @@
 #ifndef TILE_H_
 #define TILE_H_
 
+#define TILEW 80
+#define TILEH 40
+
 #include "Collidable.hpp"
 #include "TileState.hpp"
 

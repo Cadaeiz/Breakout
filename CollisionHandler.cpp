@@ -2,44 +2,31 @@
 
 void CollisionHandler::handleCollisions()
 {
-	List<Paddle>::Iterator pIter;
-	List<Wall>::Iterator wIter;
-	List<Ball>::Iterator bIter;
-	List<Tile>::Iterator tIter;
-
-	for(pIter = paddles.getIterator(); pIter.hasNext();)
+	/* iterate through all pairs c1,c2 of Collidable objects in collidables */
+	for (int i = 0; i < NUM_TYPES; i++)
 	{
-		Paddle * p = pIter.next();
-		
-		for(wIter = walls.getIterator(); wIter.hasNext();)
+		List<Collidable>::Iterator iter1 = collidables[i].getIterator();
+		while (iter1.hasNext())
 		{
-			Wall * w = wIter.next();
-			if (p -> intersects(*w))
-				p -> collide(*w);
-		}
-	}
-
-	for (bIter = balls.getIterator(); bIter.hasNext();)
-	{
-		Ball * b = bIter.next();
-		
-		for (pIter = paddles.getIterator(); pIter.hasNext();)
-		{
-			Paddle * p = pIter.next();
-			if (b -> intersects(*p))
-				b -> collide(*p);
-		}
-		for (wIter = walls.getIterator(); wIter.hasNext();)
-		{
-			Wall * w = wIter.next();
-			if (b -> intersects(*w))
-				b -> collide(*w);
-		}
-		for (tIter = tiles.getIterator(); tIter.hasNext();)
-		{
-			Tile * t = tIter.next();
-			if (b -> intersects(*t))
-				b -> collide(*t);
+			Collidable & c1 = *iter1.next();
+			for (int j = i; j < NUM_TYPES; j++)
+			{
+				/* if type i can collide with type j */
+				if (collisionMatrix[i][j])
+				{
+					List<Collidable>::Iterator iter2 = collidables[j].getIterator();
+					while (iter2.hasNext())
+					{
+						Collidable & c2 = *iter2.next();
+						/* if c1 is currently overlapping with c2, handle the collision */
+						if (c1.intersects(c2))
+						{
+							c1.collide(c2);
+							c2.collide(c1);
+						}
+					}
+				}
+			}
 		}
 	}
 }

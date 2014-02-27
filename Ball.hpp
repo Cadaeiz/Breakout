@@ -1,6 +1,8 @@
 #ifndef BALL_H_
 #define BALL_H_
 
+#define BALLRAD 25.0
+
 #include <SFML/Graphics.hpp>
 #include "Collidable.hpp"
 #include "BallState.hpp"
@@ -32,7 +34,7 @@ private:
 
 	Paddle * primaryPaddle;
 	sf::Sprite sprite;
-	sf::Vector2f vel, size;
+	sf::Vector2f vel;
 	float angle, dtheta, speed;
 
 	void changeState(int state);

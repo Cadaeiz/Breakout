@@ -35,7 +35,7 @@ void BallLaunchState::draw(Ball & b, sf::RenderWindow & window)
 	sf::Vertex line[] = 
 	{
 		sf::Vertex(b.getCenter()),
-		sf::Vertex(b.getCenter() + sf::Vector2f(5*sin(b.angle), 5*cos(b.angle)))
+		sf::Vertex(b.getCenter() + sf::Vector2f(10*sin(b.angle), 10*cos(b.angle)))
 	};
 	window.draw(line,2,sf::Lines);
 }
@@ -43,7 +43,8 @@ void BallLaunchState::draw(Ball & b, sf::RenderWindow & window)
 void BallLaunchState::handleEvent(Ball & b, sf::Event event)
 {
 	if (event.type == sf::Event::KeyPressed &&
-		event.key.code == sf::Keyboard::Space)
+		event.key.code == sf::Keyboard::Space ||
+		event.type == sf::Event::MouseButtonPressed)
 		b.changeState(Ball::MOVING);
 }
 
@@ -67,35 +68,36 @@ void BallMovingState::update(Ball & b)
 
 void BallMovingState::collide(Ball & b, Paddle & p)
 {
-	sf::FloatRect rect = p.getCollisionBox();
+	/* if ball is above the paddle */
+	if (b.getCenter().y < p.getCenter().y)
+	{
+		/* assume the collision is vertical, and displace the ball outside of the paddle */
+		b.move(sf::Vector2f(0,(p.getCenter().y - p.getSize().y / 2)-(b.getCenter().y + b.getSize().y / 2)));
 
-	sf::Vector2f distance = b.getCenter() - p.getCenter();
-
-	/* assume the collision is with the top of the paddle, and displace the ball outside of it */
-	b.move(sf::Vector2f(0,rect.top - (b.collisionBox.top + b.collisionBox.height)));
-
-	
+		/* reverse the trajectory of the ball */
+		b.vel.y *= -1;
+	}
 }
 
 /* on collision, negate the velocity on the axis the collision occured, then
  * displace the ball to be outside of the collidable object */
 void BallMovingState::collide(Ball & b, Collidable & c)
 {
-	sf::FloatRect rect = c.getCollisionBox();
+	sf::Vector2f size = c.getSize();
 	
 	sf::Vector2f distance = b.getCenter() - c.getCenter();
 
 	/* if the collision is vertical */
-	if (distance.x == 0 || abs(distance.y / distance.x) > abs(rect.height / rect.width))
+	if (distance.x == 0 || abs(distance.y / distance.x) > abs(size.y / size.x))
 	{
 		b.vel.y *= -1;
 
 		/* collision occurs on the bottom side of the collidable (top of ball) */
 		if (distance.y > 0)
-			b.move(sf::Vector2f(0,(rect.top + rect.height) - b.collisionBox.top));
+			b.move(sf::Vector2f(0,(c.getCenter().y + size.y / 2) - (b.getCenter().y - b.getSize().y / 2)));
 		/* collision occurs on the top of the collidable (bottom of ball) */
 		else
-			b.move(sf::Vector2f(0,rect.top - (b.collisionBox.top + b.collisionBox.height)));
+			b.move(sf::Vector2f(0,(c.getCenter().y - size.y / 2) - (b.getCenter().y + b.getSize().y / 2)));
 	}
 	/* if the collision is horizontal */
 	else
@@ -104,17 +106,17 @@ void BallMovingState::collide(Ball & b, Collidable & c)
 
 		/* collision occurs on the right of the collidable (left of ball) */
 		if (distance.x > 0)
-			b.move(sf::Vector2f((rect.left + rect.width) - b.collisionBox.left,0));
+			b.move(sf::Vector2f((c.getCenter().x + size.x / 2)-(b.getCenter().x - b.getSize().x / 2),0));
 		/* collision occurs on the left of the collidable (right of ball) */
 		else
-			b.move(sf::Vector2f(rect.left - (b.collisionBox.left + b.collisionBox.width),0));
+			b.move(sf::Vector2f((c.getCenter().x - size.x / 2)-(b.getCenter().x + b.getSize().x / 2),0));
 	}
 }
 
 void BallDyingState::init(Ball & b)
 {
 	/* reset collisionBox to prevent further collisions */
-	b.collisionBox = sf::FloatRect(0,0,0,0);
+	((CBRect *) b.box) -> setSize(sf::Vector2f(0,0));
 }
 
 void BallDyingState::update(Ball & b)
