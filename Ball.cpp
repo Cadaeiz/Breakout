@@ -1,14 +1,11 @@
 #include "Ball.hpp"
 
-Ball::Ball(sf::Vector2f Pos, sf::Texture & texture, float sp, Paddle & paddle)
+Ball::Ball(sf::Vector2f Pos, sf::Texture & texture, float sp, Paddle & paddle) : Collidable(CBCircle(Pos, BALLRAD / 2), 0)
 {
 	sprite.setTexture(texture);
 	sprite.setPosition(Pos);
 
-	collisionBox = sf::FloatRect(sprite.getGlobalBounds());
-
-	size = sf::Vector2f(collisionBox.width, collisionBox.height);
-	sprite.setOrigin(size.x / 2, size.y / 2);
+	sprite.setOrigin(BALLRAD / 2, BALLRAD / 2);
 
 	primaryPaddle = &paddle;
 	speed = sp;
@@ -43,13 +40,11 @@ void Ball::changeState(int state)
 void Ball::setPosition(sf::Vector2f p)
 {
 	sprite.setPosition(p);
-	collisionBox.left = p.x - collisionBox.width / 2;
-	collisionBox.top = p.y - collisionBox.height / 2;
+	box -> setPosition(p);
 }
 
 void Ball::move(sf::Vector2f dp)
 {
 	sprite.move(dp);
-	collisionBox.left += dp.x;
-	collisionBox.top += dp.y;
+	box -> move(dp);
 }
