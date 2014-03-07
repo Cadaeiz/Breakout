@@ -39,16 +39,10 @@
     <ClInclude Include="TileState.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="State.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Singleton.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="List.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BallFactory.hpp">
@@ -72,6 +66,18 @@
     <ClInclude Include="CollisionHandler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionBox.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -83,9 +89,6 @@
     <ClCompile Include="GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Collidable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Wall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,16 +98,10 @@
     <ClCompile Include="Paddle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="State.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TileState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="List.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
@@ -126,6 +123,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collidable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

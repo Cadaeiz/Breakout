@@ -1,13 +1,13 @@
 #include "CollisionBox.hpp"
 
-bool CBRect::intersects(CBRect cbr)
+bool CBRect::intersects(CBRect & cbr)
 {
 	sf::Vector2f diff = center - cbr.center;
 	sf::Vector2f combinedSize = (size + cbr.size);
 	return (2*abs(diff.x) < combinedSize.x && 2*abs(diff.y) < combinedSize.y);
 }
 
-bool CBRect::intersects(CBCircle cbc)
+bool CBRect::intersects(CBCircle & cbc)
 {
 	sf::Vector2f diff = center - cbc.getCenter();
 	float dx = abs(diff.x) - size.x / 2, 
@@ -16,7 +16,7 @@ bool CBRect::intersects(CBCircle cbc)
 	return ((dx < 0 && dy < radius) || (dy < 0 && dx < radius) || (dx*dx + dy*dy < radius*radius));
 }
 
-bool CBCircle::intersects(CBCircle cbc)
+bool CBCircle::intersects(CBCircle & cbc)
 {
 	sf::Vector2f diff = center -  cbc.center;
 	float radSum = radius + cbc.radius;
@@ -34,7 +34,7 @@ CBArray::~CBArray()
 	}
 }
 
-bool CBArray::intersects(CollisionBox box)
+bool CBArray::intersects(CollisionBox & box)
 {
 	/* check if any boxes in the list intersect the given box */
 	List<CollisionBox>::Iterator iter = boxes.getIterator();

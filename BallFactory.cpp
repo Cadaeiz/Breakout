@@ -6,51 +6,43 @@ BallFactory::~BallFactory()
 	reset();
 }
 
-void BallFactory::loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect())
+void BallFactory::loadTexture(const sf::Image & spritesheet)
 {
-	texture.loadFromImage(image,area);
+	texture.loadFromImage(spritesheet,sf::IntRect(120,0,40,40));
 }
 
-Ball * BallFactory::generate(sf::Vector2f pos)
+Ball * BallFactory::generate(float speed, Paddle & paddle)
 {
-	Ball * b = new Ball(pos,texture);
+	Ball * b = new Ball(texture,speed,paddle);
 	active.addItem(b);
 	return b;
 }
 
 void BallFactory::reset()
 {
-	Ball * b;
 	List<Ball>::Iterator iter = active.getIterator();
 	while (iter.hasNext())
 	{
-		b = iter.next();
-		active.removeItem(b);
-		delete b;
+		delete iter.next();
+		iter.removeLastItem();
 	}
 }
 
 /* delete all balls in a dead state */
 void BallFactory::filterDead()
 {
-	Ball * b;
 	List<Ball>::Iterator iter = active.getIterator();
 	while (iter.hasNext())
-	{
-		b = iter.next();
-		if (p -> isDead())
-		{
-			active.removeItem(b);
-			delete b;
-		}
-	}
+		if (iter.next() -> isDead())
+			/* delete dead balls and remove them from the list */
+			delete iter.removeLastItem();
 }
 
-void BallFactory::update()
+void BallFactory::update(float time)
 {
 	List<Ball>::Iterator iter = active.getIterator();
 	while (iter.hasNext())
-		iter.next() -> update();
+		iter.next() -> update(time);
 }
 
 void BallFactory::draw(sf::RenderWindow & window)

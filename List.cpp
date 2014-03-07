@@ -1,11 +1,11 @@
-#include "List.hpp"
+/*#include "List.hpp"
 
 template <class Item>
-void List::addItem(Item * item)
+void List<Item>::addItem(Item * item)
 {
 	Node * n = new Node;
 	n -> item = item;
-	/* add node to the end of the list */
+	// add node to the end of the list
 	n -> prev = last;
 	n -> next = 0;
 	if (last == 0)
@@ -16,7 +16,7 @@ void List::addItem(Item * item)
 }
 
 template <class Item>
-bool List::removeItem(Item * item)
+bool List<Item>::removeItem(Item * item)
 {
 	bool removed = false;
 	Node * match = 0;
@@ -27,7 +27,7 @@ bool List::removeItem(Item * item)
 		if (n -> item == item)
 		{
 			removeNode(n);
-			/* mark node for deletion */
+			// mark node for deletion
 			match = n;
 			removed = true;
 		}
@@ -36,7 +36,7 @@ bool List::removeItem(Item * item)
 }
 
 template <class Item>
-void List::removeNode(Node * n)
+void List<Item>::removeNode(Node * n)
 {
 	if (n -> prev != 0)
 		(n -> prev) -> next = n -> next;
@@ -50,9 +50,9 @@ void List::removeNode(Node * n)
 }
 
 template <class Item>
-List::~List()
+List<Item>::~List()
 {
-	/* delete all remaining nodes */
+	// delete all remaining nodes
 	Node * n = first;
 
 	while (first != 0)
@@ -64,13 +64,13 @@ List::~List()
 }
 
 template <class Item>
-List::Iterator List::getIterator()
+typename List<Item>::Iterator List<Item>::getIterator()
 {
 	return Iterator(first);
 }
 
 template <class Item>
-Item * List::Iterator::next()
+Item * List<Item>::Iterator::next()
 {
 	if(hasNext())
 	{
@@ -83,7 +83,7 @@ Item * List::Iterator::next()
 }
 
 template <class Item>
-Item * List::Iterator::removeLastItem()
+Item * List<Item>::Iterator::removeLastItem()
 {
 	Item * item = 0;
 	if (prevNode != 0)
@@ -95,3 +95,4 @@ Item * List::Iterator::removeLastItem()
 	}
 	return item;
 }
+*/

@@ -5,7 +5,7 @@
 
 class GameObject
 {
-	virtual void update() = 0;
+	virtual void update(float time) = 0;
 	virtual void draw(sf::RenderWindow & window) = 0;
 	virtual void handleEvent(sf::Event event) = 0;
 };

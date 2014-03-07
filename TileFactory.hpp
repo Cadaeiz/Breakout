@@ -6,6 +6,7 @@
 #include "Tile.hpp"
 
 
+
 class TileFactory
 {
 private:
@@ -14,14 +15,16 @@ private:
 public:
 	~TileFactory();
 	List<Tile> & getList() { return active; }
-	void loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect());
-	Tile * generate(int dur, sf::Vector2f pos);
+	void loadTexture(const sf::Image & spritesheet);
+	Tile * generate(int dur, sf::Vector2f pos, int type);
+	Tile * generate(std::string line);
+	Tile * generate(Tile & tile);
 	void reset();
-	void filterDead();
-	void update();
+	unsigned int filterDead();
+	void update(float time);
 	void draw(sf::RenderWindow & window);
 	void handleEvent(sf::Event event);
-
+	bool isEmpty() { return !active.getIterator().hasNext(); }
 };
 
 #endif

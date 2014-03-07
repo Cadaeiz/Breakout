@@ -1,6 +1,7 @@
 #include "Paddle.hpp"
 #include "Wall.hpp"
 #include "Game.hpp"
+#include "Ball.hpp"
 
 Paddle::Paddle(sf::Vector2f pos, sf::Texture & texture) : Collidable(CBRect(pos.x,pos.y,PADDLEW,PADDLEH), 1)
 {
@@ -13,15 +14,15 @@ Paddle::Paddle(sf::Vector2f pos, sf::Texture & texture) : Collidable(CBRect(pos.
 	stuckBall = 0;
 }
 
-void Paddle::update()
+void Paddle::update(float time)
 {
 	float x = getCenter().x;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		x -= STEP;
+		x -= Game::ScreenWidth * time;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		x += STEP;
+		x += Game::ScreenWidth * time;
 
 	setXPos(x);
 }
@@ -29,7 +30,7 @@ void Paddle::update()
 void Paddle::handleEvent(sf::Event event)
 {
 	if (event.type == sf::Event::MouseMoved)
-		setXPos(event.mouseMove.x);
+		setXPos((float) event.mouseMove.x);
 }
 
 /* if paddle collides with a wall,

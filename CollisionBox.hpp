@@ -4,15 +4,19 @@
 #include "GameObject.hpp"
 #include "List.hpp"
 
+class CBCircle;
+class CBRect;
+class CBArray;
+
 /* Generic Collision Box held by all collidable objects */
 class CollisionBox
 {
 public:
-	sf::Vector2f getCenter();
-	sf::Vector2f getSize();
-	bool intersects(CollisionBox c);
-	void move(sf::Vector2f diff);
-	void setPosition(sf::Vector2f pos);
+	virtual sf::Vector2f getCenter() = 0;
+	virtual sf::Vector2f getSize() = 0;
+	virtual void setPosition(sf::Vector2f pos) = 0;
+	virtual void move(sf::Vector2f pos) = 0;
+	virtual bool intersects(CollisionBox & c) = 0;
 };
 
 /* Rectangular Collision Box */
@@ -30,9 +34,9 @@ public:
 	sf::Vector2f getCenter() { return center; }
 	sf::Vector2f getSize() { return size; }
 	void move(sf::Vector2f diff) { center += diff; }
-	bool intersects(CBRect cbr);
-	bool intersects(CBCircle cbc);
-	bool intersects(CollisionBox cb) { return cb.intersects(*this); }
+	bool intersects(CBRect & cbr);
+	bool intersects(CBCircle & cbc);
+	bool intersects(CollisionBox & cb) { return cb.intersects(*this); }
 };
 
 /* Circular Collision Box */
@@ -48,11 +52,11 @@ public:
 	void setPosition(sf::Vector2f pos) { center = pos; }
 	void setRadius(float rad) { radius = rad; }
 	sf::Vector2f getCenter() { return center; }
-	sf::Vector2f getSize() { return Vector2f(2*radius, 2*radius); }
+	sf::Vector2f getSize() { return sf::Vector2f(2*radius, 2*radius); }
 	float getRadius() { return radius; }
 	void move(sf::Vector2f diff) { center += diff; }
-	bool intersects(CBCircle cbc);
-	bool intersects(CollisionBox cb) { return cb.intersects(*this); }
+	bool intersects(CBCircle & cbc);
+	bool intersects(CollisionBox & cb) { return cb.intersects(*this); }
 };
 
 /* array of circular and rectangular collision boxes */
@@ -70,10 +74,10 @@ public:
 	void addRect(sf::Vector2f center, sf::Vector2f size) {boxes.addItem(new CBRect(center, size)); }
 	void addRect(float x, float y, float width, float height) {boxes.addItem(new CBRect(x, y, width, height)); }
 	sf::Vector2f getCenter() { return center; }
-	sf::Vector2f getSize() { return Vector2f(0,0); }
+	sf::Vector2f getSize() { return sf::Vector2f(0,0); }
 	void move(sf::Vector2f diff);
 	void setPosition(sf::Vector2f pos) { move(pos - center); }
-	bool intersects(CollisionBox box);
+	bool intersects(CollisionBox & box);
 };
 
 #endif

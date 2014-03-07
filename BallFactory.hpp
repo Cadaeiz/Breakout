@@ -13,13 +13,14 @@ class BallFactory
 public:
 	~BallFactory();
 	List<Ball> & getList() { return active; }
-	void loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect());
-	Ball * generate(sf::Vector2f pos);
+	void loadTexture(const sf::Image & spritesheet);
+	Ball * generate(float speed, Paddle & paddle);
 	void reset();
 	void filterDead();
-	void update();
+	void update(float time);
 	void draw(sf::RenderWindow & window);
 	void handleEvent(sf::Event event);
+	bool isEmpty() { return !active.getIterator().hasNext(); }
 };
 
 #endif

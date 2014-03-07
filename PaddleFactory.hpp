@@ -13,12 +13,13 @@ private:
 public:
 	~PaddleFactory();
 	List<Paddle> & getList() { return active; }
-	void loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect());
+	void loadTexture(const sf::Image & spritesheet);
 	Paddle * generate(sf::Vector2f pos);
 	void reset();
-	void update();
+	void update(float time);
 	void draw(sf::RenderWindow & window);
-	void handleEvent(sf::Event event);
+	void handleEvent(sf::Event e);
+	Paddle * getFirst();
 };
 
 #endif

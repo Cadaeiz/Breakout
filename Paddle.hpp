@@ -6,7 +6,8 @@
 
 #include "Collidable.hpp"
 #include "Wall.hpp"
-#include "Ball.hpp"
+
+class Ball;
 
 class Paddle : public Collidable
 {
@@ -18,7 +19,7 @@ private:
 	void move(float dx);
 public:
 	Paddle(sf::Vector2f pos, sf::Texture & texture);
-	void update();
+	void update(float time);
 	void draw(sf::RenderWindow & window) { window.draw(sprite); }
 	void handleEvent(sf::Event event);
 	void collide(Wall & c);

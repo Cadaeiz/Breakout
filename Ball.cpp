@@ -1,11 +1,14 @@
 #include "Ball.hpp"
 
-Ball::Ball(sf::Vector2f Pos, sf::Texture & texture, float sp, Paddle & paddle) : Collidable(CBCircle(Pos, BALLRAD / 2), 0)
-{
-	sprite.setTexture(texture);
-	sprite.setPosition(Pos);
+struct Ball::Machine Ball::StateMachine;
 
-	sprite.setOrigin(BALLRAD / 2, BALLRAD / 2);
+Ball::Ball(sf::Texture & texture, float sp, Paddle & paddle) : Collidable(CBCircle(sf::Vector2f(0,0),BALLRAD), 0)
+{
+	/* place ball above center of paddle */
+	setPosition(paddle.getCenter() + sf::Vector2f(0,(float) BALLRAD+paddle.getSize().y/2));
+	sprite.setTexture(texture);
+
+	sprite.setOrigin(BALLRAD, BALLRAD);
 
 	primaryPaddle = &paddle;
 	speed = sp;

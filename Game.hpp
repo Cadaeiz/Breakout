@@ -2,40 +2,63 @@
 #define GAME_H_
 
 #include <SFML/Graphics.hpp>
+#include "FactoryFactory.hpp"
+#include "Menu.hpp"
+#include "GameState.hpp"
 
-#define NUMSTATES 1
+#define NUMSTAGES 4
+#define NUMLEVELS 4
 
 class Game
 {
 	friend class MainMenuState;
-	friend class LoadStageState;
-	friend class LoadLevelState;
 	friend class GameplayState;
 	friend class PauseState;
 	friend class GameOverState;
 	friend class ExitState;
-	const static int MAINMENU	= 0,
-					 LOADSTAGE	= 1,
-					 LOADLEVEL	= 2,
-					 GAMEPLAY	= 3,
-					 PAUSE		= 4,
-					 GAMEOVER	= 5,
-					 EXIT		= 6;
+	friend class LevelCreationState;
+	friend class LCPauseState;
+
+	const static int MAINMENU	 = 0,
+					 GAMEPLAY	 = 1,
+					 PAUSE		 = 2,
+					 GAMEOVER	 = 3,
+					 EXIT		 = 4,
+					 LEVELEDITOR = 5,
+					 LCPAUSE	 = 6;
+
 private:
-	static struct
+	static struct Machine
 	{
 		MainMenuState mainMenu;
-		LoadStageState loadStage;
-		LoadLevelState loadLevel;
 		GameplayState gameplay;
 		PauseState pause;
 		GameOverState gameover;
 		ExitState exit;
+		LevelCreationState levelcreation;
+		LCPauseState lcpause;
 	} StateMachine;
 	GameState * currentState;
 	void changeState(int state);
+	
+	FactoryFactory factory;
+	int level, lives, stage;
+	unsigned int score, highscore;
+	sf::Texture bgTexture, menuTexture, buttonTexture;
+	sf::Sprite bgSprite;
+	List<Menu> menus;
+	Menu * currentMenu;
+	string stageNames[NUMSTAGES];
+	int currentStage;
+	float currentSpeed;
+	sf::Font font;
+	Tile activeTile;
+	string filename;
+	sf::Text filenameText;
+	bool typing;
 
 public:
+	Game() : activeTile(3,sf::Vector2f(0,0)) { }
 	const static int ScreenWidth = 800, ScreenHeight = 600;
 	void init();
 	void cleanup();
@@ -43,6 +66,8 @@ public:
 	void handleEvent(sf::Event e) { currentState -> handleEvent(*this, e); }
 	void run(float time) { currentState -> run(*this, time); }
 	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }
+	void loadLevel();
+	bool exited() { return currentState == &StateMachine.exit; }
 };
 
 #endif

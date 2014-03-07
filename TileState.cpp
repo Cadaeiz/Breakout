@@ -1,4 +1,11 @@
 #include "TileState.hpp"
+#include "Tile.hpp"
+
+
+void TileState::draw(Tile & t, sf::RenderWindow & window) 
+{
+	window.draw(t.sprite); 
+}
 
 void TileActiveState::collide(Tile & t, Ball & b)
 {
@@ -13,7 +20,7 @@ void TileDyingState::init(Tile & t)
 }
 
 
-void TileDyingState::update(Tile & t)
+void TileDyingState::update(Tile & t, float time)
 {
 	/* decrement the opacity of the sprite until it is invisible */
 	sf::Color color = t.sprite.getColor();

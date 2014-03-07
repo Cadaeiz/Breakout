@@ -1,4 +1,5 @@
 #include "WallFactory.hpp"
+#include "Wall.hpp"
 
 WallFactory::WallFactory()
 {
@@ -12,9 +13,9 @@ WallFactory::~WallFactory()
 	reset();
 }
 
-void WallFactory::loadTexture(const sf::Image & image, const sf::IntRect & area = sf::IntRect())
+void WallFactory::loadTexture(const sf::Image & spritesheet)
 {
-	texture.loadFromImage(image,area);
+	texture.loadFromImage(spritesheet,sf::IntRect(0,0,120,40));
 }
 
 Wall * WallFactory::generate(sf::Vector2f & pos, int length, bool horizontal = true)
@@ -27,13 +28,11 @@ Wall * WallFactory::generate(sf::Vector2f & pos, int length, bool horizontal = t
 /* delete all objects in list */
 void WallFactory::reset()
 {
-	Wall * w;
 	List<Wall>::Iterator iter = active.getIterator();
 	while (iter.hasNext())
 	{
-		w = iter.next();
-		active.removeItem(w);
-		delete w;
+		delete iter.next();
+		iter.removeLastItem();
 	}
 }
 

@@ -1,7 +1,7 @@
 #ifndef BALL_H_
 #define BALL_H_
 
-#define BALLRAD 25.0
+#define BALLRAD 20.0
 
 #include <SFML/Graphics.hpp>
 #include "Collidable.hpp"
@@ -12,8 +12,6 @@ class Ball : public Collidable
 {
 	/* allow paddle to move the ball when attached in launch state */
 	friend class Paddle;
-	//friend void Paddle::setXPos(float x);
-	//friend void Paddle::move(float x);
 
 	friend class BallState;
 	friend class BallLaunchState;
@@ -23,7 +21,7 @@ class Ball : public Collidable
 	const static int LAUNCH = 0, MOVING = 1, DYING = 2, DEAD = 3;
 
 private:
-	static struct
+	static struct Machine
 	{
 		BallLaunchState launch;
 		BallMovingState moving;
@@ -41,8 +39,8 @@ private:
 	void setPosition(sf::Vector2f p);
 	void move(sf::Vector2f dp);
 public:
-	Ball(sf::Vector2f Pos, sf::Texture & texture, float speed, Paddle & paddle);
-	void update() { currentState -> update(*this); }
+	Ball(sf::Texture & texture, float speed, Paddle & paddle);
+	void update(float time) { currentState -> update(*this, time); }
 	void handleEvent(sf::Event event) { currentState -> handleEvent(*this, event); }
 	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }
 	void collide(Collidable & c) { currentState -> collide(*this, c); }

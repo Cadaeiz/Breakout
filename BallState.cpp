@@ -3,12 +3,19 @@
 #include "Game.hpp"
 #include <math.h>
 
+
+
+void BallState::draw(Ball & b, sf::RenderWindow & window) 
+{ 
+	window.draw(b.sprite); 
+}
+
 void BallLaunchState::init(Ball & b)
 {
 	b.primaryPaddle -> attach(&b);
 	/* set the initial direction as vertical, and the rate of change of its angle */
 	b.angle = -90;
-	b.dtheta = 2;
+	b.dtheta = 180;
 }
 
 void BallLaunchState::cleanup(Ball & b)
@@ -16,15 +23,15 @@ void BallLaunchState::cleanup(Ball & b)
 	b.primaryPaddle -> detach(&b);
 }
 
-void BallLaunchState::update(Ball & b)
+void BallLaunchState::update(Ball & b, float time)
 {
 	/* rotate the current angle of the ball */
-	b.angle += b.dtheta;
+	b.angle += b.dtheta * time;
 	/* if horizontal, switch directions */
 	if (b.angle >= 0 || b.angle <= -180)
 	{
 		b.dtheta *= -1;
-		b.angle += b.dtheta;
+		b.angle += b.dtheta * time;
 	}
 }
 
@@ -54,9 +61,9 @@ void BallMovingState::init(Ball & b)
 	b.vel = sf::Vector2f(b.speed * sin(b.angle), b.speed * cos(b.angle));
 }
 
-void BallMovingState::update(Ball & b)
+void BallMovingState::update(Ball & b, float time)
 {
-	b.move(b.vel);
+	b.move(sf::Vector2f(b.vel.x * time, b.vel.y * time));
 	sf::Vector2f center = b.getCenter();
 	/* if the ball has moved outside of the boundaries of the screen, go to dying state */
 	if (center.x < 0 || center.x > Game::ScreenWidth ||
@@ -74,8 +81,12 @@ void BallMovingState::collide(Ball & b, Paddle & p)
 		/* assume the collision is vertical, and displace the ball outside of the paddle */
 		b.move(sf::Vector2f(0,(p.getCenter().y - p.getSize().y / 2)-(b.getCenter().y + b.getSize().y / 2)));
 
-		/* reverse the trajectory of the ball */
-		b.vel.y *= -1;
+		/* change the trajectory of the ball */
+		sf::Vector2f traj = b.getCenter() - p.getCenter();
+		float norm = sqrt(traj.x*traj.x + traj.y*traj.y);
+		traj.x *= (b.speed / norm);
+		traj.y *= (b.speed / norm);
+		b.vel = traj;
 	}
 }
 
@@ -88,7 +99,7 @@ void BallMovingState::collide(Ball & b, Collidable & c)
 	sf::Vector2f distance = b.getCenter() - c.getCenter();
 
 	/* if the collision is vertical */
-	if (distance.x == 0 || abs(distance.y / distance.x) > abs(size.y / size.x))
+	if (distance.x == 0 || size.x != 0 && (abs(distance.y / distance.x) > abs(size.y / size.x)))
 	{
 		b.vel.y *= -1;
 
@@ -119,7 +130,7 @@ void BallDyingState::init(Ball & b)
 	((CBRect *) b.box) -> setSize(sf::Vector2f(0,0));
 }
 
-void BallDyingState::update(Ball & b)
+void BallDyingState::update(Ball & b, float time)
 {
 	/* decrement the opacity of the sprite until it is invisible */
 	sf::Color color = b.sprite.getColor();

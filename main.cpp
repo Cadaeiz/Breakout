@@ -77,6 +77,13 @@ int main()
 				game.handleEvent(e);
 			}
 		}
+
+		if (game.exited())
+		{
+			game.cleanup();
+			window.close();
+		}
+
 	}
 
 	return 0;

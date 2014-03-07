@@ -11,8 +11,8 @@ private:
 	sf::Sprite sprite;
 	Wall();
 public:
-	Wall(sf::Vector2f pos, sf::Texture & texture, float length, bool horizontal);
-	void update() { }
+	Wall(sf::Vector2f pos, sf::Texture & texture, int length, bool horizontal);
+	void update(float time) { }
 	void draw(sf::RenderWindow & window) { window.draw(sprite); }
 	void handleEvent(sf::Event event) { }
 	void collide(Collidable & c) { }

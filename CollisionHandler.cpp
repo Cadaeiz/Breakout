@@ -1,4 +1,22 @@
 #include "CollisionHandler.hpp"
+#include "Collidable.hpp"
+
+CollisionHandler::CollisionHandler()
+{
+	for (int i = 0; i < NUM_TYPES; i++)
+	{
+		collisionMatrix[0][i] = true;
+		collisionMatrix[i][0] = true;
+		if (i > 0)
+			for (int j = 1; j < NUM_TYPES; j++)
+			{
+				collisionMatrix[j][i] = false;
+				collisionMatrix[j][i] = false;
+			}
+	}
+
+	collisionMatrix[1][2] = collisionMatrix[2][1] = true;
+}
 
 void CollisionHandler::handleCollisions()
 {
@@ -19,7 +37,7 @@ void CollisionHandler::handleCollisions()
 					{
 						Collidable & c2 = *iter2.next();
 						/* if c1 is currently overlapping with c2, handle the collision */
-						if (c1.intersects(c2))
+						if ((&c1 != &c2) && c1.intersects(c2))
 						{
 							c1.collide(c2);
 							c2.collide(c1);
@@ -29,4 +47,21 @@ void CollisionHandler::handleCollisions()
 			}
 		}
 	}
+}
+
+
+bool CollisionHandler::checkCollisions(Collidable & c)
+{
+	for (int i = 0; i < NUM_TYPES; i++)
+	{
+		List<Collidable>::Iterator iter = collidables[i].getIterator();
+		while(iter.hasNext())
+		{
+			Collidable & c2 = *iter.next();
+			if (&c != &c2 && c.intersects(c2))
+				return true;
+		}
+	}
+
+	return false;
 }
