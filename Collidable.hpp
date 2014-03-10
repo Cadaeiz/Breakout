@@ -21,9 +21,9 @@ public:
 	int getType() { return collisionType; }
 	sf::Vector2f getCenter() { return box -> getCenter(); }
 	sf::Vector2f getSize() { return box -> getSize(); }
-	CollisionBox & getCollisionBox() { return *box; }
-	bool intersects(Collidable & c) { return box -> intersects(c.getCollisionBox()); }
-	virtual void collide(Collidable & c) = 0;
+	CollisionBox * getCollisionBox() { return box; }
+	bool intersects(Collidable * c) { return box -> intersects(c -> getCollisionBox()); }
+	virtual void collide(Collidable * c) = 0;
 };
 
 

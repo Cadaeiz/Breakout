@@ -15,7 +15,7 @@ public:
 	void update(float time) { }
 	void draw(sf::RenderWindow & window) { window.draw(sprite); }
 	void handleEvent(sf::Event event) { }
-	void collide(Collidable & c) { }
+	void collide(Collidable * c) { }
 };
 
 #endif

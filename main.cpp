@@ -7,7 +7,7 @@
 #define FPS 60
 #define PERIOD (1.0/FPS)
 
-#define VFPS 120
+#define VFPS 480
 #define VPER (1.0/VFPS)
 
 int main()

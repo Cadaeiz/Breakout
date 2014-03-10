@@ -10,7 +10,7 @@ Tile::Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect,
 {	
 	durability = dur;
 
-	setTexture(texture, rect);
+	setTexture(texture);
 	sprite.setPosition(pos);
 
 	/* set position relative to center of sprite */
@@ -23,6 +23,7 @@ Tile::Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect,
 Tile::Tile(int dur, sf::Vector2f pos, int type) : Collidable(CBRect(pos.x,pos.y,TILEW, TILEH), 3), type(type)
 {
 	durability = dur;
+
 	sprite.setOrigin(TILEW / 2, TILEH / 2);
 	currentState = 0;
 }
@@ -91,5 +92,5 @@ void Tile::setPosition(float x, float y)
    other objects at its current position */
 bool Tile::isValid()
 {
-	return Singleton<CollisionHandler>::getInstance() -> checkCollisions(*this);
+	return !Singleton<CollisionHandler>::getInstance() -> checkCollisions(*this);
 }

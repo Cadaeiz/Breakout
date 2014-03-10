@@ -22,8 +22,8 @@ public:
 	void update(float time);
 	void draw(sf::RenderWindow & window) { window.draw(sprite); }
 	void handleEvent(sf::Event event);
-	void collide(Wall & c);
-	void collide(Collidable & c) { }
+	void collide(Wall * c);
+	void collide(Collidable * c);
 	void attach(Ball * ball) { stuckBall = ball; }
 	void detach(Ball * ball) { if  (ball == stuckBall) stuckBall = 0; }
 };

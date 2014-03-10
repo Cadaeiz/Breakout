@@ -13,6 +13,10 @@ Button::Button(sf::Texture & texture, sf::Font & font, sf::Vector2f pos, string 
 	text.setCharacterSize((unsigned int) halfSize.y);
 	center = pos;
 	sprite.setPosition(pos - halfSize);
+	pos.y -= 5;
+	text.setPosition(pos);
+	sf::FloatRect rect = text.getLocalBounds();
+	text.setOrigin(rect.width / 2, rect.height / 2);
 }
 
 bool Button::contains(float x, float y)

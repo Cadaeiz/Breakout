@@ -39,7 +39,7 @@ int Menu::handleEvent(sf::Event e)
 
 void Menu::addButton(sf::Texture & texture, sf::Font & font, sf::Vector2f pos, string str, int ID)
 {
-	buttons[numButtons++] = new Button(texture,font,pos,str,ID);
+	buttons[numButtons++] = new Button(texture,font,pos+sprite.getPosition(),str,ID);
 }
 
 void Menu::addText(sf::Vector2f pos, sf::Font & font, int fontSize, string str)
@@ -47,7 +47,7 @@ void Menu::addText(sf::Vector2f pos, sf::Font & font, int fontSize, string str)
 	texts[numTexts] = new sf::Text();
 	texts[numTexts] -> setFont(font);
 	texts[numTexts] -> setString(str);
-	texts[numTexts] -> setPosition(pos);
+	texts[numTexts] -> setPosition(pos+sprite.getPosition());
 	texts[numTexts] -> setCharacterSize(fontSize);
 	sf::FloatRect rect = texts[numTexts] -> getLocalBounds();
 	texts[numTexts++] -> setOrigin(rect.width / 2, rect.height / 2);

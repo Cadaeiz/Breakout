@@ -14,19 +14,20 @@ void MainMenuState::init(Game & game)
 	game.stage = 0;
 	game.score = 0;
 	game.currentStage = 0;
-	game.currentSpeed = 20;
+	game.currentSpeed = 600;
 
 	
 	/* create Main Menu */
 	game.currentMenu = new Menu(game.menuTexture, game.font, sf::Vector2f(400,300), "Breakout");
 	game.menus.addItem(game.currentMenu);
 	
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"New Game", NewGame);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Controls",Controls);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Level Editor",LevelEditor);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,125),"Exit",Exit);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,-35),"New Game", NewGame);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Controls",Controls);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Level Editor",LevelEditor);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Exit",Exit);
 
 	game.bgTexture.loadFromFile("mainmenubg.png");
+	game.bgSprite.setTexture(game.bgTexture);
 }
 
 void MainMenuState::handleEvent(Game &  game, sf::Event e)
@@ -41,21 +42,21 @@ void MainMenuState::handleEvent(Game &  game, sf::Event e)
 		game.currentMenu = new Menu(game.menuTexture, game.font, sf::Vector2f(400,300), "Controls");
 		game.menus.addItem(game.currentMenu);
 
-		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,125),"Back",Back);
-		game.currentMenu -> addText(sf::Vector2f(0,-35),game.font,20,"Move Paddle: Arrow Keys / Mouse Position");
-		game.currentMenu -> addText(sf::Vector2f(0,5),game.font,20,"Launch Ball: Space / Left Mouse Button");
-		game.currentMenu -> addText(sf::Vector2f(0,45),game.font,20,"Pause: Enter");
+		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Back",Back);
+		game.currentMenu -> addText(sf::Vector2f(0,-35),game.font,15,"Move Paddle: Arrow Keys / Mouse Position");
+		game.currentMenu -> addText(sf::Vector2f(0,5),game.font,15,"Launch Ball: Space / Left Mouse Button");
+		game.currentMenu -> addText(sf::Vector2f(0,45),game.font,15,"Pause: Enter");
 		break;
 
 	case LevelEditor:
 		game.currentMenu = new Menu(game.menuTexture, game.font, sf::Vector2f(400,300), "Choose Stage");
 		game.menus.addItem(game.currentMenu);
 
-		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,-35),"<Type 1>",Stage1);
-		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"<Type 2>",Stage2);
-		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"<Type 3>",Stage3);
-		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"<Type 4>",Stage4);
-		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,125),"Back",Back);
+		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,-75),"Forest",Stage1);
+		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,-35),"Water",Stage2);
+		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Sky",Stage3);
+		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Space",Stage4);
+		game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Back",Back);
 		break;
 	case Exit:
 		game.changeState(Game::EXIT);
@@ -76,6 +77,8 @@ void MainMenuState::handleEvent(Game &  game, sf::Event e)
 		game.bgTexture.loadFromFile(game.stageNames[game.currentStage] + "bg.png");
 		game.factory.loadSpriteSheet(game.stageNames[game.currentStage] + "ss.png");
 		
+		game.activeTile.setTexture(game.factory.tileFactory.getTexture());
+
 		game.changeState(Game::LEVELEDITOR);
 		break;
 	}
@@ -125,7 +128,7 @@ void GameplayState::handleEvent(Game & game, sf::Event e)
 		e.key.code == sf::Keyboard::Return)
 		game.changeState(Game::PAUSE);
 	else
-		game.factory.paddleFactory.handleEvent(e);
+		game.factory.handleEvent(e);
 }
 
 void GameplayState::draw(Game & game, sf::RenderWindow & window)
@@ -139,9 +142,9 @@ void GameOverState::init(Game & game)
 	/* create Game Over Menu */
 	game.currentMenu = new Menu(game.menuTexture, game.font, sf::Vector2f(400,300), "Game Over");
 
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Continue",Continue);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Main Menu",MainMenu);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,125),"Exit",Exit);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Continue",Continue);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Main Menu",MainMenu);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Exit",Exit);
 
 	/* add score to menu (and check if a new high score was reached) */
 	string score = "Score: " + game.score;
@@ -195,9 +198,9 @@ void PauseState::init(Game & game)
 	/* create pause menu */
 	game.currentMenu = new Menu(game.menuTexture, game.font, sf::Vector2f(400,300), "Paused");
 
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Continue",Continue);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Main Menu",MainMenu);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,125),"Exit",Exit);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Continue",Continue);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Main Menu",MainMenu);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Exit",Exit);
 
 }
 
@@ -268,8 +271,7 @@ void LevelCreationState::draw(Game & game, sf::RenderWindow & window)
 {
 	window.draw(game.bgSprite);
 	game.factory.draw(window);
-
-
+	game.activeTile.draw(window);
 }
 
 void LCPauseState::init(Game & game)
@@ -277,10 +279,10 @@ void LCPauseState::init(Game & game)
 	/* create pause menu */
 	game.currentMenu = new Menu(game.menuTexture, game.font, sf::Vector2f(400,300), "Paused");
 
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Continue",Continue);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Save Design",SaveDesign);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Main Menu",MainMenu);
-	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,125),"Exit",Exit);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,-35),"Continue",Continue);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Save Design",SaveDesign);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Main Menu",MainMenu);
+	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Exit",Exit);
 
 	game.typing = false;
 	game.filename = "";

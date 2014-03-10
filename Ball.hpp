@@ -43,7 +43,7 @@ public:
 	void update(float time) { currentState -> update(*this, time); }
 	void handleEvent(sf::Event event) { currentState -> handleEvent(*this, event); }
 	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }
-	void collide(Collidable & c) { currentState -> collide(*this, c); }
+	void collide(Collidable * c) { currentState -> collide(*this, c); }
 	bool isDead() { return (currentState == &StateMachine.dead); }
 };
 

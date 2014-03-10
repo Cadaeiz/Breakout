@@ -7,7 +7,13 @@ void TileState::draw(Tile & t, sf::RenderWindow & window)
 	window.draw(t.sprite); 
 }
 
-void TileActiveState::collide(Tile & t, Ball & b)
+void TileActiveState::collide(Tile & t, Collidable * c)
+{
+	if (c -> getType() == 0)
+		collide(t,(Ball *) c);
+}
+
+void TileActiveState::collide(Tile & t, Ball * b)
 {
 	if (--t.durability <= 0)
 		t.changeState(Tile::DYING);

@@ -15,7 +15,7 @@ public:
 	virtual void update(Ball & b, float time) = 0;
 	virtual void handleEvent(Ball & b, sf::Event event) = 0;
 	virtual void draw(Ball & b, sf::RenderWindow & window);
-	virtual void collide(Ball & b, Collidable & c) = 0;
+	virtual void collide(Ball & b, Collidable * c) = 0;
 };
 
 class BallLaunchState : public BallState
@@ -25,7 +25,7 @@ class BallLaunchState : public BallState
 	void update(Ball & b, float time);
 	void handleEvent(Ball & b, sf::Event event);
 	void draw(Ball & b, sf::RenderWindow & window);
-	void collide(Ball & b, Collidable & c) { }
+	void collide(Ball & b, Collidable * c) { }
 };
 
 class BallMovingState : public BallState
@@ -34,8 +34,8 @@ class BallMovingState : public BallState
 	void cleanup(Ball & b) { }
 	void update(Ball & b, float time);
 	void handleEvent(Ball & b, sf::Event event) { }
-	void collide(Ball & b, Paddle & p);
-	void collide(Ball & b, Collidable & c);
+	void collide(Ball & b, Paddle * p);
+	void collide(Ball & b, Collidable * c);
 };
 
 class BallDyingState : public BallState
@@ -44,7 +44,7 @@ class BallDyingState : public BallState
 	void cleanup(Ball & b) { }
 	void update(Ball & b, float time);
 	void handleEvent(Ball & b, sf::Event event) { }
-	void collide(Ball & b, Collidable & c) { }
+	void collide(Ball & b, Collidable * c) { }
 };
 
 class BallDeadState : public BallState
@@ -53,6 +53,6 @@ class BallDeadState : public BallState
 	void cleanup(Ball & b) { }
 	void update(Ball & b, float time) { }
 	void handleEvent(Ball & b, sf::Event event) { }
-	void collide(Ball & b, Collidable & c) { }
+	void collide(Ball & b, Collidable * c) { }
 };
 #endif

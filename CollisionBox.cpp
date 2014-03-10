@@ -1,26 +1,44 @@
 #include "CollisionBox.hpp"
 
-bool CBRect::intersects(CBRect & cbr)
+bool CBRect::intersects(CBRect * cbr)
 {
-	sf::Vector2f diff = center - cbr.center;
-	sf::Vector2f combinedSize = (size + cbr.size);
+	sf::Vector2f diff = center - cbr -> center;
+	sf::Vector2f combinedSize = (size + cbr -> size);
 	return (2*abs(diff.x) < combinedSize.x && 2*abs(diff.y) < combinedSize.y);
 }
 
-bool CBRect::intersects(CBCircle & cbc)
+bool CBRect::intersects(CBCircle * cbc)
 {
-	sf::Vector2f diff = center - cbc.getCenter();
+	sf::Vector2f diff = center - cbc -> getCenter();
 	float dx = abs(diff.x) - size.x / 2, 
 		  dy = abs(diff.y) - size.y / 2;
-	float radius = cbc.getRadius();
+	float radius = cbc -> getRadius();
 	return ((dx < 0 && dy < radius) || (dy < 0 && dx < radius) || (dx*dx + dy*dy < radius*radius));
 }
 
-bool CBCircle::intersects(CBCircle & cbc)
+bool CBRect::intersects(CollisionBox * cb)
 {
-	sf::Vector2f diff = center -  cbc.center;
-	float radSum = radius + cbc.radius;
+	if (cb -> getType() == 0)
+		return intersects( (CBRect *) cb);
+	else if (cb -> getType() == 1)
+		return intersects( (CBCircle *) cb);
+	else 
+		return cb -> intersects(this);
+}
+
+bool CBCircle::intersects(CBCircle * cbc)
+{
+	sf::Vector2f diff = center -  cbc -> center;
+	float radSum = radius + cbc -> radius;
 	return (diff.x*diff.x + diff.y*diff.y < radSum * radSum);
+}
+
+bool CBCircle::intersects(CollisionBox * cb)
+{
+	if (cb -> getType() == 1)
+		return intersects( (CBCircle *) cb);
+	else
+		return cb -> intersects(this);
 }
 
 CBArray::~CBArray()
@@ -34,7 +52,7 @@ CBArray::~CBArray()
 	}
 }
 
-bool CBArray::intersects(CollisionBox & box)
+bool CBArray::intersects(CollisionBox * box)
 {
 	/* check if any boxes in the list intersect the given box */
 	List<CollisionBox>::Iterator iter = boxes.getIterator();

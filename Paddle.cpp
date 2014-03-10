@@ -6,8 +6,9 @@
 Paddle::Paddle(sf::Vector2f pos, sf::Texture & texture) : Collidable(CBRect(pos.x,pos.y,PADDLEW,PADDLEH), 1)
 {
 	sprite.setTexture(texture);
+	sprite.setTextureRect(sf::IntRect(0,0,160,30));
 	sprite.setPosition(pos);
-
+	sf::FloatRect rect = sprite.getGlobalBounds();
 	/* set origin of sprite as the center */
 	sprite.setOrigin(PADDLEW / 2, PADDLEH / 2);
 
@@ -33,17 +34,23 @@ void Paddle::handleEvent(sf::Event event)
 		setXPos((float) event.mouseMove.x);
 }
 
+void Paddle::collide(Collidable * c)
+{
+	if (c -> getType() == 2)
+		collide((Wall *) c);
+}
+
 /* if paddle collides with a wall,
  * displace the paddle outside of the wall */
-void Paddle::collide(Wall & c)
+void Paddle::collide(Wall * c)
 {
 	float dx;
 	/* if paddle is on the left side */
-	if (c.getCenter().x > getCenter().x)
-		dx = (c.getCenter().x - WALLWIDTH / 2) - (getCenter().x + PADDLEW / 2);
+	if (c -> getCenter().x > getCenter().x)
+		dx = (c -> getCenter().x - WALLWIDTH / 2) - (getCenter().x + PADDLEW / 2);
 	/* if paddle is on the right side */
 	else
-		dx = (c.getCenter().x + WALLWIDTH / 2) - (getCenter().x - PADDLEW / 2);
+		dx = (c -> getCenter().x + WALLWIDTH / 2) - (getCenter().x - PADDLEW / 2);
 
 	move(dx);
 }

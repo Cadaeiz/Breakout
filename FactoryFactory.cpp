@@ -1,5 +1,6 @@
 #include "FactoryFactory.hpp"
 #include <fstream>
+#include <iostream>
 
 FactoryFactory::FactoryFactory()
 {
@@ -27,12 +28,17 @@ void FactoryFactory::loadLevel(string filename)
 {
 	reset();
 
+	std::cout << "filename: " << filename << '\n';
+
 	std::ifstream file;
 	file.open(filename);
 	std::string line;
 	getline(file,line);
 	while (getline(file,line))
+	{
+		std::cout << "tile: " << line << '\n';
 		tileFactory.generate(line);
+	}
 	file.close();
 }
 

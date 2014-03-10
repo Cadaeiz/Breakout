@@ -56,7 +56,7 @@
       <AdditionalIncludeDirectories>C:\Libraries\SFML\SFML-2.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Libraries\SFML\SFML-2.1\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-main-d.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -127,6 +127,19 @@
     <ClCompile Include="TileState.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WallFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\Breakout\bgmenu.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\Button.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\forestbg.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\forestss.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\menu.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\skybg.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\skyss.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\spacebg.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\spacess.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\waterbg.png" />
+    <Image Include="..\..\..\..\..\Downloads\Breakout\waterss.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

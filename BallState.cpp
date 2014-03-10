@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include <math.h>
 
+#define PI 3.14169265358
 
 
 void BallState::draw(Ball & b, sf::RenderWindow & window) 
@@ -14,8 +15,8 @@ void BallLaunchState::init(Ball & b)
 {
 	b.primaryPaddle -> attach(&b);
 	/* set the initial direction as vertical, and the rate of change of its angle */
-	b.angle = -90;
-	b.dtheta = 180;
+	b.angle = -PI / 2;
+	b.dtheta = 2*PI;
 }
 
 void BallLaunchState::cleanup(Ball & b)
@@ -28,7 +29,7 @@ void BallLaunchState::update(Ball & b, float time)
 	/* rotate the current angle of the ball */
 	b.angle += b.dtheta * time;
 	/* if horizontal, switch directions */
-	if (b.angle >= 0 || b.angle <= -180)
+	if (b.angle >= 0 || b.angle <= -PI)
 	{
 		b.dtheta *= -1;
 		b.angle += b.dtheta * time;
@@ -42,7 +43,7 @@ void BallLaunchState::draw(Ball & b, sf::RenderWindow & window)
 	sf::Vertex line[] = 
 	{
 		sf::Vertex(b.getCenter()),
-		sf::Vertex(b.getCenter() + sf::Vector2f(10*sin(b.angle), 10*cos(b.angle)))
+		sf::Vertex(b.getCenter() + sf::Vector2f(25*cos(b.angle), 25*sin(b.angle)))
 	};
 	window.draw(line,2,sf::Lines);
 }
@@ -58,7 +59,7 @@ void BallLaunchState::handleEvent(Ball & b, sf::Event event)
 void BallMovingState::init(Ball & b)
 {
 	/* set velocity from final trajectory from launch state */
-	b.vel = sf::Vector2f(b.speed * sin(b.angle), b.speed * cos(b.angle));
+	b.vel = sf::Vector2f(b.speed * cos(b.angle), b.speed * sin(b.angle));
 }
 
 void BallMovingState::update(Ball & b, float time)
@@ -73,16 +74,16 @@ void BallMovingState::update(Ball & b, float time)
 	}
 }
 
-void BallMovingState::collide(Ball & b, Paddle & p)
+void BallMovingState::collide(Ball & b, Paddle * p)
 {
 	/* if ball is above the paddle */
-	if (b.getCenter().y < p.getCenter().y)
+	if (b.getCenter().y < p->getCenter().y)
 	{
 		/* assume the collision is vertical, and displace the ball outside of the paddle */
-		b.move(sf::Vector2f(0,(p.getCenter().y - p.getSize().y / 2)-(b.getCenter().y + b.getSize().y / 2)));
+		b.move(sf::Vector2f(0,(p->getCenter().y - p->getSize().y / 2)-(b.getCenter().y + b.getSize().y / 2)));
 
 		/* change the trajectory of the ball */
-		sf::Vector2f traj = b.getCenter() - p.getCenter();
+		sf::Vector2f traj = b.getCenter() - p->getCenter();
 		float norm = sqrt(traj.x*traj.x + traj.y*traj.y);
 		traj.x *= (b.speed / norm);
 		traj.y *= (b.speed / norm);
@@ -92,11 +93,17 @@ void BallMovingState::collide(Ball & b, Paddle & p)
 
 /* on collision, negate the velocity on the axis the collision occured, then
  * displace the ball to be outside of the collidable object */
-void BallMovingState::collide(Ball & b, Collidable & c)
+void BallMovingState::collide(Ball & b, Collidable * c)
 {
-	sf::Vector2f size = c.getSize();
+	if (c -> getType() == 1)
+	{
+		collide(b,(Paddle *) c);
+		return;
+	}
+
+	sf::Vector2f size = c -> getSize();
 	
-	sf::Vector2f distance = b.getCenter() - c.getCenter();
+	sf::Vector2f distance = b.getCenter() - c -> getCenter();
 
 	/* if the collision is vertical */
 	if (distance.x == 0 || size.x != 0 && (abs(distance.y / distance.x) > abs(size.y / size.x)))
@@ -105,10 +112,10 @@ void BallMovingState::collide(Ball & b, Collidable & c)
 
 		/* collision occurs on the bottom side of the collidable (top of ball) */
 		if (distance.y > 0)
-			b.move(sf::Vector2f(0,(c.getCenter().y + size.y / 2) - (b.getCenter().y - b.getSize().y / 2)));
+			b.move(sf::Vector2f(0,(c->getCenter().y + size.y / 2) - (b.getCenter().y - b.getSize().y / 2)));
 		/* collision occurs on the top of the collidable (bottom of ball) */
 		else
-			b.move(sf::Vector2f(0,(c.getCenter().y - size.y / 2) - (b.getCenter().y + b.getSize().y / 2)));
+			b.move(sf::Vector2f(0,(c->getCenter().y - size.y / 2) - (b.getCenter().y + b.getSize().y / 2)));
 	}
 	/* if the collision is horizontal */
 	else
@@ -117,10 +124,10 @@ void BallMovingState::collide(Ball & b, Collidable & c)
 
 		/* collision occurs on the right of the collidable (left of ball) */
 		if (distance.x > 0)
-			b.move(sf::Vector2f((c.getCenter().x + size.x / 2)-(b.getCenter().x - b.getSize().x / 2),0));
+			b.move(sf::Vector2f((c->getCenter().x + size.x / 2)-(b.getCenter().x - b.getSize().x / 2),0));
 		/* collision occurs on the left of the collidable (right of ball) */
 		else
-			b.move(sf::Vector2f((c.getCenter().x - size.x / 2)-(b.getCenter().x + b.getSize().x / 2),0));
+			b.move(sf::Vector2f((c->getCenter().x - size.x / 2)-(b.getCenter().x + b.getSize().x / 2),0));
 	}
 }
 

@@ -16,6 +16,7 @@ public:
 	~TileFactory();
 	List<Tile> & getList() { return active; }
 	void loadTexture(const sf::Image & spritesheet);
+	sf::Texture & getTexture() { return texture; }
 	Tile * generate(int dur, sf::Vector2f pos, int type);
 	Tile * generate(std::string line);
 	Tile * generate(Tile & tile);

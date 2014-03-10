@@ -13,11 +13,12 @@ void Game::init()
 
 	
 	stageNames[0] = "forest";
-	stageNames[1] = "";
-	stageNames[2] = "";
-	stageNames[3] = "";
+	stageNames[1] = "water";
+	stageNames[2] = "sky";
+	stageNames[3] = "space";
 
 	font.loadFromFile("arial.ttf");
+	changeState(MAINMENU);
 }
 
 
@@ -48,6 +49,12 @@ void Game::changeState(int state)
 	case EXIT:
 		currentState = &StateMachine.exit;
 		break;
+	case LEVELEDITOR:
+		currentState = &StateMachine.levelcreation;
+		break;
+	case LCPAUSE:
+		currentState = &StateMachine.lcpause;
+		break;
 	}
 
 	currentState -> init(*this);
@@ -68,7 +75,7 @@ void Game::loadLevel()
 
 	bgTexture.loadFromFile(stageNames[currentStage] + "bg.png");
 	factory.loadSpriteSheet(stageNames[currentStage] + "ss.png");
-	std::stringstream stagelevel(stageNames[currentStage]);
-	stagelevel << level << ".data";
+	std::stringstream stagelevel;
+	stagelevel << stageNames[currentStage] << level << ".data";
 	factory.loadLevel(stagelevel.str());
 }

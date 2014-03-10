@@ -26,7 +26,7 @@ void CollisionHandler::handleCollisions()
 		List<Collidable>::Iterator iter1 = collidables[i].getIterator();
 		while (iter1.hasNext())
 		{
-			Collidable & c1 = *iter1.next();
+			Collidable * c1 = iter1.next();
 			for (int j = i; j < NUM_TYPES; j++)
 			{
 				/* if type i can collide with type j */
@@ -35,12 +35,12 @@ void CollisionHandler::handleCollisions()
 					List<Collidable>::Iterator iter2 = collidables[j].getIterator();
 					while (iter2.hasNext())
 					{
-						Collidable & c2 = *iter2.next();
+						Collidable * c2 = iter2.next();
 						/* if c1 is currently overlapping with c2, handle the collision */
-						if ((&c1 != &c2) && c1.intersects(c2))
+						if ((c1 != c2) && c1 -> intersects(c2))
 						{
-							c1.collide(c2);
-							c2.collide(c1);
+							c1 -> collide(c2);
+							c2 -> collide(c1);
 						}
 					}
 				}
@@ -57,8 +57,8 @@ bool CollisionHandler::checkCollisions(Collidable & c)
 		List<Collidable>::Iterator iter = collidables[i].getIterator();
 		while(iter.hasNext())
 		{
-			Collidable & c2 = *iter.next();
-			if (&c != &c2 && c.intersects(c2))
+			Collidable * c2 = iter.next();
+			if (&c != c2 && c.intersects(c2))
 				return true;
 		}
 	}
