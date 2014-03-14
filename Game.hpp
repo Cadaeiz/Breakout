@@ -54,20 +54,21 @@ private:
 	sf::Font font;
 	Tile activeTile;
 	string filename;
-	sf::Text filenameText;
+	sf::Text filenameText, scoreText;
 	bool typing;
 
 public:
-	Game() : activeTile(3,sf::Vector2f(0,0)) { }
+	Game() : activeTile(3) { }
 	const static int ScreenWidth = 800, ScreenHeight = 600;
 	void init();
 	void cleanup();
 
 	void handleEvent(sf::Event e) { currentState -> handleEvent(*this, e); }
 	void run(float time) { currentState -> run(*this, time); }
-	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); }
+	void draw(sf::RenderWindow & window) { currentState -> draw(*this, window); drawScores(window); }
 	void loadLevel();
 	bool exited() { return currentState == &StateMachine.exit; }
+	void drawScores(sf::RenderWindow & window);
 };
 
 #endif

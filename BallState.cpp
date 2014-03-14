@@ -22,6 +22,8 @@ void BallLaunchState::init(Ball & b)
 void BallLaunchState::cleanup(Ball & b)
 {
 	b.primaryPaddle -> detach(&b);
+	b.launchBallSound.stop();
+	b.launchBallSound.play();
 }
 
 void BallLaunchState::update(Ball & b, float time)
@@ -29,7 +31,7 @@ void BallLaunchState::update(Ball & b, float time)
 	/* rotate the current angle of the ball */
 	b.angle += b.dtheta * time;
 	/* if horizontal, switch directions */
-	if (b.angle >= 0 || b.angle <= -PI)
+	if (b.angle >= -PI*.05 || b.angle <= -.95*PI)
 	{
 		b.dtheta *= -1;
 		b.angle += b.dtheta * time;
@@ -95,6 +97,17 @@ void BallMovingState::collide(Ball & b, Paddle * p)
  * displace the ball to be outside of the collidable object */
 void BallMovingState::collide(Ball & b, Collidable * c)
 {
+	if (c -> getType() == 3)
+	{
+		b.tileBounceSound.stop();
+		b.tileBounceSound.play();
+	}
+	else
+	{
+		b.bounceSound.stop();
+		b.bounceSound.play();
+	}
+
 	if (c -> getType() == 1)
 	{
 		collide(b,(Paddle *) c);
@@ -135,15 +148,17 @@ void BallDyingState::init(Ball & b)
 {
 	/* reset collisionBox to prevent further collisions */
 	((CBRect *) b.box) -> setSize(sf::Vector2f(0,0));
+	b.deadSound.play();
 }
 
 void BallDyingState::update(Ball & b, float time)
 {
 	/* decrement the opacity of the sprite until it is invisible */
 	sf::Color color = b.sprite.getColor();
-	if (color.a < 5)
+	if (color.a == 0 && b.deadSound.getStatus() == sf::Sound::Status::Stopped)
 		b.changeState(Ball::DEAD);
 
-	color.a -= 5;
+	if (color.a > 0)
+		color.a--;
 	b.sprite.setColor(color);
 }

@@ -62,6 +62,7 @@ void MainMenuState::handleEvent(Game &  game, sf::Event e)
 		game.changeState(Game::EXIT);
 		break;
 	case Back:
+		while (game.currentMenu -> isPlayingSound());
 		game.menus.removeItem(game.currentMenu);
 		delete game.currentMenu;
 		game.currentMenu = 0;
@@ -94,6 +95,7 @@ void MainMenuState::draw(Game & game, sf::RenderWindow & window)
 
 void MainMenuState::cleanup(Game & game)
 {
+	while (game.currentMenu -> isPlayingSound());
 	/* remove & delete all menus in list */
 	List<Menu>::Iterator iter = game.menus.getIterator();
 	while(iter.hasNext())
@@ -147,13 +149,14 @@ void GameOverState::init(Game & game)
 	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Exit",Exit);
 
 	/* add score to menu (and check if a new high score was reached) */
-	string score = "Score: " + game.score;
+	std::stringstream score;
+	score << "Score: " << game.score;
 	if (game.score > game.highscore)
 	{
-		game.score = game.highscore;
-		score += "(new record!)";
+		game.highscore = game.score;
+		score << " (new record!)";
 	}
-	game.currentMenu -> addText(sf::Vector2f(0,-70),game.font,20,score);
+	game.currentMenu -> addText(sf::Vector2f(0,-70),game.font,20,score.str());
 
 	/* reset the current level and number of lives */
 	game.level = 0;
@@ -190,6 +193,7 @@ void GameOverState::cleanup(Game & game)
 	delete game.currentMenu;
 	game.currentMenu = 0;
 	game.factory.reset();
+	game.score = 0;
 }
 
 
@@ -219,6 +223,9 @@ void PauseState::handleEvent(Game & game, sf::Event e)
 		game.changeState(Game::EXIT);
 		break;
 	}
+	if (e.type == sf::Event::KeyPressed &&
+		e.key.code == sf::Keyboard::Return)
+		game.changeState(Game::GAMEPLAY);
 }
 
 void PauseState::draw(Game & game, sf::RenderWindow & window)
@@ -235,6 +242,15 @@ void PauseState::cleanup(Game & game)
 	game.currentMenu = 0;
 }
 
+void LevelCreationState::init(Game & game) 
+{
+	game.activeTile.collisionsOn(); 
+}
+
+void LevelCreationState::cleanup(Game & game) 
+{
+	game.activeTile.collisionsOff(); 
+}
 
 void LevelCreationState::handleEvent(Game & game, sf::Event e)
 {
@@ -288,7 +304,9 @@ void LCPauseState::init(Game & game)
 	game.filename = "";
 	game.filenameText.setFont(game.font);
 	game.filenameText.setCharacterSize(20);
-	game.filenameText.setPosition(400,345);
+	game.filenameText.setPosition(400,230);
+	game.filenameText.setString("");
+	
 }
 
 void LCPauseState::handleEvent(Game & game, sf::Event e)
@@ -316,14 +334,26 @@ void LCPauseState::handleEvent(Game & game, sf::Event e)
 	{
 		if (e.text.unicode < 128)
 		{
-			game.filename += static_cast<char>(e.text.unicode);
+			if (e.text.unicode == 8)
+				game.filename.pop_back();
+			else
+				game.filename += static_cast<char>(e.text.unicode);
 			game.filenameText.setString(game.filename);
+			sf::FloatRect rect = game.filenameText.getLocalBounds();
+			game.filenameText.setOrigin(rect.width / 2, rect.height / 2);
 		}
 	}
+	if ((!game.typing) && 
+		e.type == sf::Event::KeyPressed &&
+		e.key.code == sf::Keyboard::Return)
+		game.changeState(Game::LEVELEDITOR);
+
 	if (game.typing && e.type == sf::Event::KeyPressed &&
 		e.key.code == sf::Keyboard::Return)
 	{
 		game.filenameText.setString(game.filename + " (saved)");
+		sf::FloatRect rect = game.filenameText.getLocalBounds();
+		game.filenameText.setOrigin(rect.width / 2, rect.height / 2);
 		game.typing = false;
 
 		std::ofstream file;

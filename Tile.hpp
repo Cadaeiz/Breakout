@@ -33,7 +33,7 @@ private:
 	void changeState(int state);
 public:
 	Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect, int type = 0);
-	Tile(int dur, sf::Vector2f pos, int type = 0);
+	Tile(int dur, int type = 0);
 	void setTexture(sf::Texture & texture) { sprite.setTexture(texture); sprite.setTextureRect(sf::IntRect((type/2)*80,(type%2)*40,80,40)); }
 	Tile(Tile & tile);
 	void update(float time) { currentState -> update(*this, time); }
@@ -47,6 +47,8 @@ public:
 	void setPosition(float x, float y);
 	bool isValid();
 	void setColor(sf::Color color) { sprite.setColor(color); }
+	void collisionsOff() { ((CBRect *) box) -> setSize(sf::Vector2f(0,0)); box -> setPosition(sf::Vector2f(0,0));}
+	void collisionsOn() { ((CBRect *) box) -> setSize(sf::Vector2f(TILEW,TILEH)); }
 };
 
 #endif

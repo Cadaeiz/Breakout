@@ -20,12 +20,13 @@ Tile::Tile(int dur, sf::Vector2f pos, sf::Texture & texture, sf::IntRect & rect,
 	changeState(ACTIVE);
 }
 
-Tile::Tile(int dur, sf::Vector2f pos, int type) : Collidable(CBRect(pos.x,pos.y,TILEW, TILEH), 3), type(type)
+Tile::Tile(int dur, int type) : Collidable(CBRect(0,0,TILEW, TILEH), 3), type(type)
 {
 	durability = dur;
 
 	sprite.setOrigin(TILEW / 2, TILEH / 2);
 	currentState = 0;
+	changeState(DEAD);
 }
 
 Tile::Tile(Tile & tile) : Collidable(CBRect(0,0,TILEW, TILEH), 3), type(tile.type)

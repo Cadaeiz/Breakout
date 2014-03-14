@@ -2,6 +2,7 @@
 #include "GameState.hpp"
 
 #include <sstream>
+#include <fstream>
 
 
 struct Game::Machine Game::StateMachine;
@@ -11,6 +12,8 @@ void Game::init()
 	menuTexture.loadFromFile("menu.png");
 	buttonTexture.loadFromFile("button.png");
 
+	Menu::loadSounds();
+	Ball::loadSounds();
 	
 	stageNames[0] = "forest";
 	stageNames[1] = "water";
@@ -18,12 +21,26 @@ void Game::init()
 	stageNames[3] = "space";
 
 	font.loadFromFile("arial.ttf");
+	scoreText.setFont(font);
+	scoreText.setCharacterSize(18);
+	scoreText.setPosition(600,5);
+
+
+	std::ifstream file;
+	file.open("hs.data");
+	file >> highscore;
+	file.close();
+
 	changeState(MAINMENU);
 }
 
 
 void Game::cleanup()
 {
+	std::ofstream file;
+	file.open("hs.data");
+	file << highscore;
+	file.close();
 }
 
 
@@ -62,6 +79,10 @@ void Game::changeState(int state)
 
 void Game::loadLevel()
 {
+	if (!factory.ballFactory.isEmpty())
+	{
+		while (factory.ballFactory.getList().getIterator().next() -> isPlaying());
+	}
 	/* update current level */
 	if (++level > NUMLEVELS)
 	{
@@ -78,4 +99,18 @@ void Game::loadLevel()
 	std::stringstream stagelevel;
 	stagelevel << stageNames[currentStage] << level << ".data";
 	factory.loadLevel(stagelevel.str());
+
+	factory.ballFactory.reset();
+	lives++;
+}
+
+void Game::drawScores(sf::RenderWindow & window)
+{
+	std::stringstream ss;
+	ss << "Score: " << score << "\n";
+	ss << "High:  " << highscore << "\n";
+	ss << "Lives: " << lives << "\n";
+
+	scoreText.setString(ss.str());
+	window.draw(scoreText);
 }

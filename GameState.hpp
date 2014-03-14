@@ -86,8 +86,8 @@ public:
 	void run(Game & game, float time) { }
 	void draw(Game & game, sf::RenderWindow & window);
 
-	void init(Game & game) { }
-	void cleanup(Game & game) { }
+	void init(Game & game);
+	void cleanup(Game & game);
 };
 
 class LCPauseState : public GameState

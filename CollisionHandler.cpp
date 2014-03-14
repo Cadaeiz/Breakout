@@ -36,8 +36,11 @@ void CollisionHandler::handleCollisions()
 					while (iter2.hasNext())
 					{
 						Collidable * c2 = iter2.next();
+						/* for each type, only compare each pair once (c2 < c1 when i==j) */
+						if (c1 == c2)
+							break;
 						/* if c1 is currently overlapping with c2, handle the collision */
-						if ((c1 != c2) && c1 -> intersects(c2))
+						else if (c1 -> intersects(c2))
 						{
 							c1 -> collide(c2);
 							c2 -> collide(c1);

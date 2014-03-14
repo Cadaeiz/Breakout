@@ -1,5 +1,8 @@
 #include "Menu.hpp"
 
+sf::SoundBuffer Menu::mouseOverBuffer, Menu::pressButtonBuffer;
+
+
 Menu::Menu(sf::Texture & texture, sf::Font & font, sf::Vector2f pos, string title)
 {
 	sprite.setTexture(texture);
@@ -7,8 +10,12 @@ Menu::Menu(sf::Texture & texture, sf::Font & font, sf::Vector2f pos, string titl
 	sprite.setPosition(pos);
 	sprite.setOrigin(halfSize);
 
+	mouseOverSound.setBuffer(mouseOverBuffer);
+	pressButtonSound.setBuffer(pressButtonBuffer);
+
 	numButtons = 0;
 	numTexts = 0;
+	currentButton = -1;
 
 	addText(sf::Vector2f(0,-135),font, 20,title);
 }
@@ -21,9 +28,21 @@ int Menu::handleEvent(sf::Event e)
 		for (int i = 0; i < numButtons; i++)
 		{
 			if(buttons[i] -> contains((float) e.mouseMove.x, (float) e.mouseMove.y))
+			{
 				buttons[i] -> highlight();
+				if (currentButton != i)
+				{
+					currentButton = i;
+					mouseOverSound.stop();
+					mouseOverSound.play();
+				}
+			}
 			else
+			{
+				if (currentButton == i)
+					currentButton = -1;
 				buttons[i] -> unhighlight();
+			}
 		}
 		break;
 
@@ -31,7 +50,11 @@ int Menu::handleEvent(sf::Event e)
 		if (e.mouseButton.button == sf::Mouse::Left)
 			for (int i = 0; i < numButtons; i++)
 				if (buttons[i] -> contains((float) e.mouseButton.x, (float) e.mouseButton.y))
+				{
+					pressButtonSound.stop();
+					pressButtonSound.play();
 					return buttons[i] -> getID();
+				}
 		break;
 	}
 	return -1;
@@ -71,4 +94,10 @@ Menu::~Menu()
 
 	while (--numTexts >= 0)
 		delete texts[numTexts];
+}
+
+void Menu::loadSounds()
+{
+	mouseOverBuffer.loadFromFile("mouseOverButton.wav");
+	pressButtonBuffer.loadFromFile("pressButton.wav");
 }

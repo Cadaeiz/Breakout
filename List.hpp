@@ -14,6 +14,7 @@ private:
 	Node * first, * last;
 	void removeNode(Node * n);
 public:
+	int num_elts;
 	class Iterator
 	{
 	private:
@@ -26,7 +27,7 @@ public:
 		Item * next();
 	};
 
-	List() : first(0), last(0) { }
+	List() : first(0), last(0), num_elts(0) { }
 	~List();
 	void addItem(Item * item);
 	bool removeItem(Item * item);
@@ -47,6 +48,7 @@ void List<Item>::addItem(Item * item)
 	else
 		last -> next = n;
 	last = n;
+	num_elts++;
 }
 
 template <class Item>
@@ -81,6 +83,7 @@ void List<Item>::removeNode(Node * n)
 		(n -> next) -> prev = n -> prev;
 	else
 		last = n -> prev;
+	num_elts--;
 }
 
 template <class Item>
