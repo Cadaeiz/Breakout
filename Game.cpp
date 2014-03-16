@@ -30,6 +30,7 @@ void Game::init()
 	file.open("hs.data");
 	file >> highscore;
 	file.close();
+	bgmusic.setLoop(true);
 
 	changeState(MAINMENU);
 }
@@ -99,6 +100,8 @@ void Game::loadLevel()
 	std::stringstream stagelevel;
 	stagelevel << stageNames[currentStage] << level << ".data";
 	factory.loadLevel(stagelevel.str());
+	bgmusic.openFromFile(stageNames[currentStage] + ".ogg");
+	bgmusic.play();
 
 	factory.ballFactory.reset();
 	lives++;

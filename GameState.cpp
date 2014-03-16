@@ -28,6 +28,8 @@ void MainMenuState::init(Game & game)
 
 	game.bgTexture.loadFromFile("mainmenubg.png");
 	game.bgSprite.setTexture(game.bgTexture);
+	game.bgmusic.openFromFile("menu.ogg");
+	game.bgmusic.play();
 }
 
 void MainMenuState::handleEvent(Game &  game, sf::Event e)
@@ -205,7 +207,8 @@ void PauseState::init(Game & game)
 	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,5),"Continue",Continue);
 	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,45),"Main Menu",MainMenu);
 	game.currentMenu -> addButton(game.buttonTexture, game.font, sf::Vector2f(0,85),"Exit",Exit);
-
+	
+	game.bgmusic.setVolume(50);
 }
 
 void PauseState::handleEvent(Game & game, sf::Event e)
@@ -240,6 +243,7 @@ void PauseState::cleanup(Game & game)
 	/* delete the pause menu */
 	delete game.currentMenu;
 	game.currentMenu = 0;
+	game.bgmusic.setVolume(100);
 }
 
 void LevelCreationState::init(Game & game) 

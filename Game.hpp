@@ -56,6 +56,7 @@ private:
 	string filename;
 	sf::Text filenameText, scoreText;
 	bool typing;
+	sf::Music bgmusic;
 
 public:
 	Game() : activeTile(3) { }
